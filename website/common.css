@@ -1,0 +1,90 @@
+/* ===== common.css — Shared styles for 2019血疫纪元 website ===== */
+
+/* Reset */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+
+/* Selection */
+::selection { background: rgba(200,40,40,0.45); color: #fff; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(200,40,40,0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(200,40,40,0.5); }
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid rgba(200,40,40,0.5);
+  outline-offset: 2px;
+}
+button:focus-visible, a:focus-visible {
+  outline: 2px solid rgba(200,40,40,0.7);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* Common body setup (can be overridden per-page) */
+body {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #0c0c10;
+  color: #dcdce4;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Page header (shared across radio, news, landing) */
+.page-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.8rem 2rem;
+  background: rgba(10,10,14,0.95);
+  border-bottom: 1px solid rgba(200,40,40,0.12);
+  backdrop-filter: blur(10px);
+}
+.page-header .logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.9rem; color: #e8e8f0;
+  cursor: pointer; text-decoration: none;
+}
+.page-header .logo span { color: rgba(200,40,40,0.8); }
+.page-header .nav-links {
+  display: flex; gap: 1rem; align-items: center;
+}
+.page-header .nav-links a {
+  font-size: 0.75rem; color: rgba(220,220,228,0.5);
+  text-decoration: none; transition: color 0.3s;
+}
+.page-header .nav-links a:hover { color: rgba(200,40,40,0.8); }
+.page-header .nav-links a.active { color: rgba(200,40,40,0.7); }
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.4s ease forwards; }
+
+/* Toast notification */
+.toast {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  padding: 0.6rem 1.5rem;
+  background: rgba(14,14,18,0.95);
+  border: 1px solid rgba(200,40,40,0.3);
+  border-radius: 6px;
+  color: rgba(220,220,228,0.8);
+  font-size: 0.82rem;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+  pointer-events: none;
+}

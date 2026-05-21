@@ -1,0 +1,12 @@
+# Obsidian app config
+.obsidian/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build artifacts
+website/generate_content.py.bak
+*.pyc
+__pycache__/

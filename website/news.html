@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新闻档案 - 2019 血疫纪元</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: #0a0a0e;
+  color: #dcdce4;
+  min-height: 100vh;
+}
+::selection { background: rgba(180,30,30,0.3); color: #fff; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(180,30,30,0.2); border-radius: 3px; }
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid rgba(180,30,30,0.4);
+  outline-offset: 2px;
+}
+button:focus-visible, a:focus-visible {
+  outline: 2px solid rgba(180,30,30,0.6);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== HEADER ===== */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.8rem 2rem;
+  background: rgba(10,10,14,0.95);
+  border-bottom: 1px solid rgba(180,30,30,0.1);
+  backdrop-filter: blur(10px);
+}
+.site-header .logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.9rem; color: #e8e8f0;
+  cursor: pointer; text-decoration: none;
+}
+.site-header .logo span { color: rgba(180,30,30,0.8); }
+.site-header .back {
+  font-size: 0.75rem; color: rgba(220,220,228,0.5);
+  text-decoration: none; transition: color 0.3s;
+}
+.site-header .back:hover { color: rgba(180,30,30,0.8); }
+
+/* ===== ARCHIVE ROOM ===== */
+.archive-room {
+  max-width: 1100px; margin: 5rem auto 3rem;
+  padding: 0 2rem;
+}
+
+/* Archive Title */
+.archive-title {
+  text-align: center; margin-bottom: 3rem;
+}
+.archive-title h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.5rem; color: #e8e8f0;
+  letter-spacing: 0.15em; margin-bottom: 0.5rem;
+}
+.archive-title .sub {
+  font-size: 0.78rem; color: rgba(220,220,228,0.35);
+  letter-spacing: 0.2em;
+}
+.archive-title .divider {
+  width: 40px; height: 1px;
+  background: rgba(180,30,30,0.3);
+  margin: 1rem auto 0;
+}
+
+/* Timeline Navigation */
+.timeline-nav {
+  display: flex; justify-content: center; gap: 1rem;
+  margin-bottom: 2.5rem; flex-wrap: wrap;
+}
+.timeline-btn {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0.8rem 1.2rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px; cursor: pointer;
+  transition: all 0.3s; min-width: 120px;
+}
+.timeline-btn:hover {
+  background: rgba(180,30,30,0.06);
+  border-color: rgba(180,30,30,0.2);
+}
+.timeline-btn.active {
+  background: rgba(180,30,30,0.08);
+  border-color: rgba(180,30,30,0.4);
+}
+.timeline-btn .date {
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem; color: rgba(180,30,30,0.6);
+  letter-spacing: 0.05em;
+}
+.timeline-btn .paper {
+  font-size: 0.82rem; color: rgba(220,220,228,0.7);
+  margin-top: 0.2rem;
+}
+.timeline-btn.active .paper { color: #e8e8f0; }
+
+/* ===== NEWSPAPER PAGE ===== */
+.newspaper {
+  max-width: 800px; margin: 0 auto;
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity 0.4s ease, max-height 0.4s ease;
+}
+.newspaper.active {
+  opacity: 1; max-height: 5000px;
+}
+
+.paper-page {
+  position: relative;
+  background: #f5f0e8;
+  color: #1a1a1a;
+  border-radius: 2px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.1);
+  padding: 2.5rem 3rem;
+  font-family: 'Noto Serif', 'Noto Serif SC', 'SimSun', serif;
+  overflow: hidden;
+}
+
+/* Paper texture overlay */
+.paper-page::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(0,0,0,0.015) 28px,
+      rgba(0,0,0,0.015) 29px
+    );
+  pointer-events: none; z-index: 1;
+}
+.paper-page::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.08) 100%);
+  pointer-events: none; z-index: 2;
+}
+
+/* Paper content above texture */
+.paper-content {
+  position: relative; z-index: 3;
+}
+
+/* Masthead */
+.masthead {
+  text-align: center;
+  padding-bottom: 1rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 3px double #1a1a1a;
+}
+.masthead .paper-name {
+  font-family: 'Noto Serif', 'SimSun', serif;
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  font-weight: 900;
+  color: #1a1a1a;
+  letter-spacing: 0.15em;
+}
+.masthead .paper-date {
+  font-size: 0.75rem;
+  color: #555;
+  margin-top: 0.3rem;
+  letter-spacing: 0.1em;
+}
+.masthead .paper-edition {
+  font-size: 0.7rem;
+  color: #777;
+  margin-top: 0.1rem;
+}
+
+/* Headline */
+.headline {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.headline h1 {
+  font-family: 'Noto Serif', 'Noto Serif SC', 'SimSun', serif;
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  font-weight: 900;
+  color: #1a1a1a;
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+}
+.headline .subtitle {
+  font-size: 0.88rem;
+  color: #444;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Article Body - Newspaper Columns */
+.article-columns {
+  column-count: 2;
+  column-gap: 2rem;
+  column-rule: 1px solid #ccc;
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: #2a2a2a;
+  text-align: justify;
+}
+.article-columns p {
+  margin-bottom: 0.8em;
+  text-indent: 2em;
+}
+.article-columns p:first-child { text-indent: 0; }
+.article-columns p:first-child::first-letter {
+  font-size: 2em; float: left;
+  line-height: 1; margin-right: 0.1em;
+  font-weight: 700; color: #1a1a1a;
+}
+.article-columns .byline {
+  font-size: 0.78rem; color: #666;
+  margin-bottom: 1em; text-indent: 0;
+  font-style: italic;
+}
+.article-columns .quote {
+  margin: 0.8rem 0; padding: 0.5rem 0.8rem;
+  border-left: 2px solid #999;
+  font-style: italic; color: #444;
+  text-indent: 0;
+}
+.article-columns .highlight {
+  background: rgba(180,30,30,0.08);
+  padding: 0 2px;
+}
+
+/* Footer */
+.paper-footer {
+  margin-top: 1.5rem; padding-top: 0.8rem;
+  border-top: 1px solid #ccc;
+  display: flex; justify-content: space-between;
+  font-size: 0.7rem; color: #888;
+}
+
+/* Analysis Panel (below paper) */
+.analysis-panel {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(14,14,18,0.95);
+  border: 1px solid rgba(180,30,30,0.1);
+  border-radius: 6px;
+  display: none;
+}
+.newspaper.active .analysis-panel { display: block; }
+
+.analysis-panel h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.9rem; color: rgba(180,30,30,0.8);
+  margin-bottom: 1rem; letter-spacing: 0.1em;
+}
+.analysis-panel .clue {
+  display: flex; gap: 0.8rem; align-items: flex-start;
+  margin-bottom: 0.8rem;
+}
+.analysis-panel .clue-num {
+  flex-shrink: 0; width: 20px; height: 20px;
+  background: rgba(180,30,30,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; color: rgba(180,30,30,0.8);
+  font-weight: 700; margin-top: 0.15rem;
+}
+.analysis-panel .clue-text {
+  font-size: 0.82rem; color: rgba(220,220,228,0.7);
+  line-height: 1.6;
+}
+.analysis-panel .clue-text strong { color: rgba(220,220,228,0.9); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .archive-room { padding: 0 1rem; }
+  .paper-page { padding: 1.5rem 1.2rem; }
+  .article-columns { column-count: 1; }
+  .timeline-btn { min-width: 90px; padding: 0.6rem 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <a class="logo" href="index.html">2019 <span>血疫纪元</span></a>
+  <div style="display:flex;gap:1rem;align-items:center;">
+    <a class="back" href="radio.html" style="color:rgba(255,140,40,0.5);">FM电台</a>
+    <a class="back" href="index.html">&larr; 主站</a>
+  </div>
+</header>
+
+<!-- Archive Room -->
+<div class="archive-room">
+
+  <div class="archive-title">
+    <h1>新 闻 档 案 室</h1>
+    <div class="sub">X市 &middot; 2019年9月 - 11月</div>
+    <div class="divider"></div>
+  </div>
+
+  <!-- Timeline Navigation -->
+  <div class="timeline-nav">
+    <div class="timeline-btn active" onclick="showPaper(0)">
+      <span class="date">2019.09.10</span>
+      <span class="paper">X市商报</span>
+    </div>
+    <div class="timeline-btn" onclick="showPaper(1)">
+      <span class="date">2019.11.19</span>
+      <span class="paper">X市晨报</span>
+    </div>
+    <div class="timeline-btn" onclick="showPaper(2)">
+      <span class="date">2019.11.25</span>
+      <span class="paper">X市晚报</span>
+    </div>
+  </div>
+
+  <!-- Paper 1: X市商报 -->
+  <div class="newspaper active" id="paper-0">
+    <div class="paper-page">
+      <div class="paper-content">
+        <div class="masthead">
+          <div class="paper-name">X 市 商 报</div>
+          <div class="paper-date">2019年9月10日 &middot; 星期二</div>
+          <div class="paper-edition">经济版头条 &middot; 总第 4,872 期</div>
+        </div>
+        <div class="headline">
+          <h1>我市赢得"2019国际农业博览会"主办权，打造全球农业科技交流新高地</h1>
+          <div class="subtitle">市政府发布官方合作招标公告，"北极星商业投资"拔得头筹，独家承办核心后勤服务</div>
+        </div>
+        <div class="article-columns">
+          <p class="byline">本报讯（记者 张远航）</p>
+          <p>昨日，我市在与国内多个城市的激烈竞争中脱颖而出，成功获得"2019年度国际农业博览会（IAE 2019）"的独家主办权。此次博览会预计将于11月下旬在我市国际会展中心举行，届时将有来自全球三十多个国家和地区的顶尖农业科技企业、科研机构及政府代表团参会。市政府已将此活动定位为本年度最重要的国际交流盛事，旨在推动我市成为全球现代农业技术与贸易的交汇中心。</p>
+          <p>为确保博览会顺利进行，市政府本着高效、专业的原则，于8月下旬发布了针对大会后勤保障的"一揽子"服务合作招标公告。公告内容涵盖指定接待酒店服务、展品及物资全程温控物流，以及会务期间的地面交通协调等多个核心环节。</p>
+          <p>经过为期半个月的严格评审，<span class="highlight">北极星商业投资有限公司</span>凭借其雄厚的资本实力、覆盖酒店与物流的多元化产业布局，以及一份号称"整合了国际顶尖安保与生物安全标准"的保障方案，成功击败多家竞争对手，拔得头筹，成为本次博览会独家核心后勤服务供应商。</p>
+          <p>根据市政府公示的合作协议，北极星商业投资有限公司将通过其旗下的两大子公司来履行合同：<span class="highlight">北极星商旅酒店（CBD店）</span>将作为本次博览会级别最高的官方指定接待酒店，负责接待所有海外贵宾、重要代表团及特邀技术专家；<span class="highlight">北极星冷链</span>将独家负责所有需特殊温控的海外展品从海关到展馆的全程运输工作。</p>
+          <p>市招商局负责人李主任在新闻发布会上表示："北极星公司的综合解决方案展现了卓越的专业性，特别是其在冷链运输中对生物安全防护的承诺，符合我们举办国际一流展会的高标准要求。"</p>
+          <p>据悉，本次博览会最大的亮点之一，是来自北美的农业科技代表团将携多项前沿技术与展品参展，其规模和技术含量均创下历届之最。其中，部分展品对运输环境要求极为苛刻，必须在全程深低温（-70℃）下保存。北极星冷链公司在竞标方案中特别强调，其拥有多辆配备了"Cryo-Guard"先进深冷系统的特种运输车，足以满足此类高规格的运输需求。</p>
+        </div>
+        <div class="paper-footer">
+          <span>X市商报 &copy; 2019</span>
+          <span>经济版 &middot; 第B1版</span>
+        </div>
+      </div>
+    </div>
+    <div class="analysis-panel">
+      <h3>线索分析</h3>
+      <div class="clue">
+        <div class="clue-num">1</div>
+        <div class="clue-text"><strong>时间点：</strong>2019年9月10日，早于所有已发生事件，为整个阴谋提供了"合法"且"公开"的起点。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">2</div>
+        <div class="clue-text"><strong>北极星公司的核心地位：</strong>通过官方公开招标，合法获得博览会核心后勤业务，解释了后续出事的酒店和冷链车都属于这家公司。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">3</div>
+        <div class="clue-text"><strong>冷链运输车：</strong>报道明确提及负责运输需要特殊温控的"活体样本、生物制剂"，直接将长江二桥上出事的冷链车与危险品联系起来。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">4</div>
+        <div class="clue-text"><strong>暗线伏笔：</strong>"国际顶尖安保与生物安全标准"和"军用级别的安全保障"，在血疫爆发后回看，更像是为运输真正的"生物武器"所做的提前声明。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paper 2: X市晨报 -->
+  <div class="newspaper" id="paper-1">
+    <div class="paper-page">
+      <div class="paper-content">
+        <div class="masthead">
+          <div class="paper-name">X 市 晨 报</div>
+          <div class="paper-date">2019年11月19日 &middot; 星期二</div>
+          <div class="paper-edition">第A3版：城市动态 &middot; 总第 7,215 期</div>
+        </div>
+        <div class="headline">
+          <h1>突发！跨江大桥早高峰瘫痪，冷链车故障司机晕厥酿拥堵</h1>
+          <div class="subtitle">故障货车"不明气味"引围观混乱，司机送医前行为异常；交管部门呼吁谨慎通过事故路段</div>
+        </div>
+        <div class="article-columns">
+          <p class="byline">本报讯（记者 王明）</p>
+          <p>昨日清晨，X市南北交通大动脉——长江二桥在周一早高峰陷入长达三小时的瘫痪，车流一度绵延近五公里。这场意外的交通"肠梗阻"，源于一辆冷链运输货车突发故障，而更令人忧心的是，该车驾驶员在等待救援过程中突发晕厥并伴有异常行为，加剧了现场的混乱和拥堵。</p>
+          <p>事故发生于上午6点50分左右。据后方车辆司机李先生描述，一辆白色车体、印有"<span class="highlight">北极星冷链</span>"标识的中型厢式货车，在行驶至大桥中段时突然失去动力，车身明显抖动后停靠在最右侧车道。多名目击者称，货车停下后，其车厢后部保温层似乎出现破损，有少量白色霜雾状气体间歇性逸出，并伴有难以描述的微弱刺激性气味。</p>
+          <p>交警迅速赶到现场。据现场执勤交警张警官描述，他们在尝试与货车司机沟通时，发现该名中年男性司机状态极为不佳。"他脸色苍白，满头虚汗，眼神有些涣散，说话时声音嘶哑且断断续续，反复抱怨'头痛得要裂开'、'喉咙像被堵住'。"张警官表示，司机自称姓陈，在等待拖车期间，他试图下车检查故障。</p>
+          <p>然而，陈司机接下来的行为让现场人员感到困惑和担忧。他并未使用工具，而是不顾交警劝阻，徒手去触摸和试图撕扯车厢后部破损的保温材料，动作显得笨拙且固执。目击者王女士称："那位司机师傅看起来像中暑了，但眼神又很怪，直勾勾地盯着车后面破损的地方，用手去抓那些白雾，喊他也不怎么理人，有点魔怔了。"</p>
+          <p>就在交警试图强行将其带离至安全区域时，陈司机突然身体剧烈抽搐，随后瘫软晕倒在地，并伴有短暂的牙关紧闭和肢体僵直。交警立即封锁事故区域，呼叫120急救。医护人员赶到后初步判断其可能为突发性晕厥，并发现其体温偏高、颈部肌肉异常僵硬。陈司机被紧急送往市第三人民医院急诊科救治。</p>
+          <p>据市第三人民医院急诊科透露，陈姓司机入院后一度情况危急，主要症状为<span class="highlight">高热、严重脱水、谵妄及间歇性肌肉痉挛</span>，院方已对其进行隔离观察，并组织了神经内科、感染科专家会诊。</p>
+        </div>
+        <div class="paper-footer">
+          <span>X市晨报 &copy; 2019</span>
+          <span>城市动态 &middot; 第A3版</span>
+        </div>
+      </div>
+    </div>
+    <div class="analysis-panel">
+      <h3>线索分析</h3>
+      <div class="clue">
+        <div class="clue-num">1</div>
+        <div class="clue-text"><strong>零号病人：</strong>司机的"用头撞车""眼睛发红""抽搐"完美复现了病毒侵入神经系统后的早期症状，是第一个被公开记录的感染者。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">2</div>
+        <div class="clue-text"><strong>病毒载体：</strong>"保温层破损""白色霜雾状气体""刺激性气味"暗示冷链运输中存在异常物质泄漏。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">3</div>
+        <div class="clue-text"><strong>公司指向：</strong>"北极星冷链"对事故不予回应，保持神秘感。一周后该公司酒店也将出事。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">4</div>
+        <div class="clue-text"><strong>伪装：</strong>新闻将焦点放在"司机突发疾病引发拥堵"上，医生的初步诊断方向（神经内科、感染科）为后期确诊埋下伏笔。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paper 3: X市晚报 -->
+  <div class="newspaper" id="paper-2">
+    <div class="paper-page">
+      <div class="paper-content">
+        <div class="masthead">
+          <div class="paper-name">X 市 晚 报</div>
+          <div class="paper-date">2019年11月25日 &middot; 星期一</div>
+          <div class="paper-edition">头版 &middot; 总第 8,103 期</div>
+        </div>
+        <div class="headline">
+          <h1>"重大火灾"警报拉响，北极星酒店遭全封闭，现场未见明火浓烟引猜测</h1>
+          <div class="subtitle">特警封街，官方三缄其口，国际农博会外籍展商被困楼内</div>
+        </div>
+        <div class="article-columns">
+          <p class="byline">本报讯（记者 刘毅）</p>
+          <p>昨日下午4时许，位于我市中央商务区的北极星商旅酒店突然拉响最高级别火警，随即整栋大楼被紧急封锁。然而，这场被定义为"重大火灾"的事故却显得疑点重重：截至记者发稿时，现场并未观察到任何明火或浓烟，但安保级别之高，堪比重大反恐行动，引发市民广泛关注与猜测。</p>
+          <p>下午4点15分，记者赶到现场时，酒店周边主要路口已被市局特警完全封锁。酒店正门前，一排黄黑相间的防冲撞拒马森然林立，数队头戴战术头盔、手持防爆盾的特警人员严阵以待，气氛异常紧张。与常规火灾现场不同的是，除了几辆停在远处待命的消防指挥车外，未见有消防车展开云梯进行高空作业，亦无消防员进入楼内。空气中弥漫的不是焦糊味，而是一种令人不安的寂静。</p>
+          <p>"说是着火了，可你看那楼，玻璃好好的，连个烟熏的印子都没有，"在警戒线外经营便利店的王老板对记者说，"反倒是这些警察，一个个跟拍电影似的，把整条街都封死了，不让进也不让出，连问一句都不理人。"</p>
+          <p>据了解，北极星商旅酒店是正在我市举办的"国际农业博览会"官方指定的两家接待酒店之一，入住了大量外籍参展商，其中不乏来自北美和欧洲的农业科技代表团。事件发生后，市新闻办公室仅在官方微博发布了一条简短通报，称"某酒店发生火情，消防与公安部门已迅速处置"，通报中未提及酒店名称及火灾具体情况。</p>
+          <p>值得注意的是，涉事的北极星商旅酒店，其母公司正是北极星商业投资有限公司。该公司旗下的另一家子公司——<span class="highlight">北极星冷链</span>，在一周前刚刚因其货车在长江二桥上发生故障、司机突发急病送医而引发全城关注。据本报后续了解，该名司机陈某入院后病情危重，已被转入重症监护室并实施严格的<span class="highlight">生物安全隔离</span>，其病因至今未对外公布。</p>
+          <p>晚间，一位自称是酒店提前下班的后勤员工向本报匿名透露，封锁前约半小时，酒店内部通讯系统曾收到来自<span class="highlight">19楼客房区域的紧急医疗求助</span>，随后安保部门便上楼处置，不久后整栋大楼的通讯信号和网络被切断，所有员工被要求待在原地，直至特警进驻并宣布封锁。</p>
+        </div>
+        <div class="paper-footer">
+          <span>X市晚报 &copy; 2019</span>
+          <span>头版 &middot; 第A1版</span>
+        </div>
+      </div>
+    </div>
+    <div class="analysis-panel">
+      <h3>线索分析</h3>
+      <div class="clue">
+        <div class="clue-num">1</div>
+        <div class="clue-text"><strong>火灾借口：</strong>"未见明火浓烟"与"特警重兵封锁"形成强烈对比，暗示"火灾"只是官方说辞。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">2</div>
+        <div class="clue-text"><strong>公司关联：</strong>将"北极星酒店"与"北极星冷链"明确关联，暗示两个事件背后有共同的源头。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">3</div>
+        <div class="clue-text"><strong>19楼暗线：</strong>"海外农业公司的技术顾问团"和"紧急医疗求助"将事件焦点缩小到与"彼岸实验室"有关的群体。</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">4</div>
+        <div class="clue-text"><strong>官方反应：</strong>动用特警而非消防主力，表明事件性质被定义为"安全威胁"而非"公共灾害"，符合生物武器泄露的秘密处理模式。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var currentPaper = 0;
+var totalPapers = 3;
+
+function showPaper(index) {
+  currentPaper = index;
+  document.querySelectorAll('.timeline-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === index);
+  });
+  document.querySelectorAll('.newspaper').forEach((paper, i) => {
+    paper.classList.toggle('active', i === index);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft' && currentPaper > 0) {
+    showPaper(currentPaper - 1);
+  } else if (e.key === 'ArrowRight' && currentPaper < totalPapers - 1) {
+    showPaper(currentPaper + 1);
+  }
+});
+</script>
+
+</body>
+</html>
