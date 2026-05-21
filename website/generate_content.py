@@ -103,7 +103,7 @@ ITEMS = [
     # ── 第一章：幸存者 ──
     {'part': 2, 'id': 'p2-ch1-01', 'title': '城北公园',       'section': '第一章·幸存者', 'type': 'story', 'chapter': '第一章', 'file': 'Part2/第一章/01-城北公园.md'},
     {'part': 2, 'id': 'p2-ch1-02', 'title': '记忆的重量',     'section': '第一章·幸存者', 'type': 'story', 'chapter': '第一章', 'file': 'Part2/第一章/02-记忆的重量.md'},
-    {'part': 2, 'id': 'p2-ch1-03', 'title': '幽灵的技能',     'section': '第一章·幸存者', 'type': 'story', 'chapter': '第一章', 'file': None},
+    {'part': 2, 'id': 'p2-ch1-03', 'title': '幽灵的技能',     'section': '第一章·幸存者', 'type': 'story', 'chapter': '第一章', 'file': 'Part2/第一章/03-幽灵的技能.md'},
     {'part': 2, 'id': 'p2-ch1-04', 'title': '回收队',         'section': '第一章·幸存者', 'type': 'story', 'chapter': '第一章', 'file': None},
 
     # ── 第二章：暗网 ──
