@@ -342,6 +342,28 @@ body {
   font-size: 0.85rem; color: var(--text-dim);
   margin-top: 0.5rem;
 }
+.timeline-tabs {
+  display: flex; justify-content: center; gap: 0;
+  margin: 1rem auto 0.5rem;
+  border-bottom: 1px solid var(--border);
+  max-width: 400px;
+}
+.timeline-tab {
+  flex: 1; padding: 0.5rem 1rem;
+  text-align: center; cursor: pointer;
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.timeline-tab:hover { color: var(--text-secondary); }
+.timeline-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent-dim);
+}
 
 .timeline-container { position: relative; padding: 0 2rem; }
 .timeline-line {
@@ -950,39 +972,78 @@ function inlineFormat(text) {
 }
 
 // ===== TIMELINE =====
-function showTimeline() {
+const TIMELINE_DATA = {
+  1: {
+    label: '血疫爆发',
+    range: '2019年8月 — 11月',
+    events: [
+      { date: '2019.08', title: '盖亚之巢计划启动', desc: '永生树集团董事会批准"盖亚之巢"项目，目标X市25,600名受试者', id: 'origin-01' },
+      { date: '2019.08.29', title: '贸易协定签署', desc: '某北方大国与彼岸大陆签署贸易协定，第19.3条暗含"永久性人口优化"条款', id: 'polaris-report', hasContent: true },
+      { date: '2019.09.10', title: '博览会招标公告', desc: 'X市获得农博会承办权，北极星集团中标独家物流', id: 'news-shangbao', hasContent: true },
+      { date: '2019.10.13', title: '实验室泄露事件', desc: '盖亚意识突破实验室控制，12名研究人员被同化', id: 'origin-02' },
+      { date: '2019.10.18', title: '军运会掩护运输', desc: '国际军事运动会期间，"极星冷链"以BSL-4标签将生物制剂走私入境', id: 'polaris-report', hasContent: true },
+      { date: '2019.10.28', title: '北极星酒店25层就绪', desc: 'M-10首次进入改造后的25层，发现蓝色菌毯开始脉动', id: 'origin-01' },
+      { date: '2019.11初', title: '蓝色星尘免费发放', desc: '"天穹雾化"电子烟油通过免费试用在年轻人中扩散', id: 'bluedust-ad', hasContent: true },
+      { date: '2019.11.19', title: '大桥事件', desc: '冷链货车司机在清江大桥上抽搐倒下——第一个公开信号', id: 'news-chenbao', hasContent: true },
+      { date: '2019.11.19', title: 'FM87.7早间节目', desc: '主持人阿哲将大桥事故包装为"奇怪的交通事故"', id: 'radio-bridge', hasContent: true },
+      { date: '2019.11.21', title: 'FM101.7路怒事件', desc: '常青立交桥上两名司机"原始尖叫"，被归因为路怒症', id: 'radio-traffic', hasContent: true },
+      { date: '2019.11.25', title: '北极星酒店封锁', desc: '特警封锁北极星酒店19楼，以"重大火灾"为由掩盖真相', id: 'hotel-p1', hasContent: true },
+      { date: '2019.11.25', title: '入城记', desc: '市民李卫误触蓝色凝胶，被"处理"为武器原材料', id: 'entry-citizen', hasContent: true },
+      { date: '2019.11.25', title: '晚报头版', desc: '《X市晚报》以"重大火灾"为由报道酒店封锁', id: 'news-wanbao', hasContent: true },
+      { date: '2019.11下旬', title: '幸福里3号楼沦陷', desc: '"母亲"同化整栋居民，K-7被提升为主节点K-8', id: 'b3-hive', hasContent: true },
+      { date: '2019.11下旬', title: '净化行动', desc: 'M-10执行赫菲斯托斯协议，K-8将全部数据下载入自身大脑', id: 'b3-survivor', hasContent: true },
+      { date: '2019.11下旬', title: '档案员出逃', desc: '唯一的幸存者携带137位居民的记忆，从地下防空洞逃出', id: 'b3-ghost', hasContent: true },
+      { date: '2019.11下旬', title: '老王的日记', desc: '隔离墙建设工人见证进口蓝色凝胶被国产替代品替换', id: 'diary-wang', hasContent: true },
+      { date: '不明', title: '圣女计划', desc: '第7工作组完成A-01改造，"甘露"——完美的社会控制工具诞生', id: 'side-manna', hasContent: true },
+    ]
+  },
+  2: {
+    label: '暗影反击',
+    range: '2019年11月 — 2020年12月',
+    events: [
+      { date: '2019.11.27', title: '季风找到幸存者', desc: '季风在城北公园发现19名幸存者，留下物资并承诺一周后返回', id: 'p2-side-06', hasContent: true },
+      { date: '2019.11.29', title: '回收队突袭', desc: '19名幸存者被回收队全部静默处理，李明失去意识', id: 'p2-ch1-04', hasContent: true },
+      { date: '2019.12.01', title: '李明苏醒', desc: '李明在白色房间中醒来，发现自己被囚禁已20天', id: 'p2-ch2-01', hasContent: true },
+      { date: '2019.12中旬', title: '真相浮现', desc: '李明发现周先生是陈医生的丈夫，小雨和老孙也在同一设施', id: 'p2-ch2-04', hasContent: true },
+      { date: '2020.01', title: '小雨之死', desc: '小雨无法承受创伤，在设施中自杀，留下纸板画', id: 'p2-ch3-02', hasContent: true },
+      { date: '2020.01', title: '老孙之死', desc: '老孙因恐惧导致脑部功能崩溃，当场死亡', id: 'p2-ch3-03', hasContent: true },
+      { date: '2020.01下旬', title: '季风的计划', desc: '季风招募李明参与反击，目标：恢复K-8意识，入侵北极星酒店25层服务器', id: 'p2-ch4-01', hasContent: true },
+      { date: '2020.02初', title: '逃离设施', desc: 'M-10带队突破通风井，信号干扰器仅能维持6小时', id: 'p2-ch4-02', hasContent: true },
+      { date: '2020.02', title: '地下网络', desc: '团队转移至幸福里3号楼地下防空洞，建立临时指挥部', id: 'p2-ch4-03', hasContent: true },
+      { date: '2020.02中旬', title: '突袭北极星酒店', desc: '季风、M-10、李明强攻25层服务器室，M-10牺牲，数据传输完成', id: 'p2-ch4-04', hasContent: true },
+      { date: '2020.06.12', title: '真相广播', desc: '137名居民姓名全球公开，永生树股价暴跌98%，高管被捕', id: 'p2-ch5-01', hasContent: true },
+      { date: '2020.06.15', title: '周先生苏醒', desc: '周先生恢复部分意识，与陈医生重逢', id: 'p2-ch5-02', hasContent: true },
+      { date: '2020.06.20', title: '李明回家', desc: '李明回到幸福里小区，与妻子张薇和儿子李小明团聚', id: 'p2-ch5-03', hasContent: true },
+      { date: '2020.07.01', title: '画比手机好', desc: '李明在城北公园雕塑底座放下小雨的纸板画', id: 'p2-ch5-04', hasContent: true },
+      { date: '2020.12.01', title: '纪念碑落成', desc: '幸福里3号楼前竖立纪念碑，刻有137个名字："他们存在过。"', id: 'p2-ch5-04', hasContent: true },
+    ]
+  }
+};
+
+let _currentTimelinePart = 1;
+
+function showTimeline(part) {
+  if (part) _currentTimelinePart = part;
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   const area = document.getElementById('content-area');
-
-  const timelineEvents = [
-    { date: '2019.08', title: '盖亚之巢计划启动', desc: '永生树集团启动"盖亚之巢"项目，目标25,600名受试者', id: 'origin-01' },
-    { date: '2019.09.10', title: '博览会招标公告', desc: 'X市获得农博会承办权，北极星集团中标独家物流', id: 'news-shangbao', hasContent: true },
-    { date: '2019.10', title: '军运会掩护运输', desc: '国际军事运动会期间，"冰载凝胶"以BSL-4标签走私入境', id: null },
-    { date: '2019.10.13', title: '实验室泄露事件', desc: '盖亚意识突破实验室控制，12名研究人员被同化', id: 'origin-02' },
-    { date: '2019.11初', title: '蓝色星尘免费发放', desc: '"蓝色星尘"电子烟油通过免费试用在年轻人中扩散', id: 'bluedust-ad', hasContent: true },
-    { date: '2019.11.19', title: '大桥事件', desc: '冷链货车司机在清江大桥上抽搐倒下——第一个公开信号', id: 'news-chenbao', hasContent: true },
-    { date: '2019.11.19', title: 'BBS求助帖', desc: '"我爸是不是中邪了？"——蓝色电子烟的异常反应', id: null },
-    { date: '2019.11.21', title: '电台路怒事件', desc: 'FM101.7交通节目：两名司机在立交桥上"原始尖叫"', id: 'radio-traffic', hasContent: true },
-    { date: '2019.11.25', title: '北极星酒店封锁', desc: '特警封锁北极星酒店19楼，一名感染儿童逃脱', id: 'hotel-p1', hasContent: true },
-    { date: '2019.11.25', title: '入城记', desc: '市民李卫误触蓝色凝胶，被"处理"为武器原材料', id: 'entry-citizen', hasContent: true },
-    { date: '2019.11.25', title: '晚报头版', desc: '《X市晚报》以"重大火灾"为由报道酒店封锁', id: 'news-wanbao', hasContent: true },
-    { date: '2019.11下旬', title: '幸福里社区3号楼', desc: '"母亲"同化整栋居民，K-7被提升为主节点K-8', id: 'b3-hive', hasContent: true },
-    { date: '2019.11下旬', title: '净化行动', desc: 'M-10执行赫菲斯托斯协议，K-8将全部数据下载入自身大脑', id: 'b3-survivor', hasContent: true },
-    { date: '2019.11下旬', title: '档案员出逃', desc: '唯一的幸存者携带137位居民的记忆，从地下防空洞逃出', id: 'b3-ghost', hasContent: true },
-    { date: '2019.11下旬', title: '老王的日记', desc: '隔离墙建设工人见证进口蓝色凝胶被国产替代品替换', id: 'diary-wang', hasContent: true },
-    { date: '不明', title: '圣女计划', desc: '第7工作组完成A-01改造，"甘露"——完美的社会控制工具诞生', id: 'side-manna', hasContent: true },
-  ];
+  const tl = TIMELINE_DATA[_currentTimelinePart];
+  const otherPart = _currentTimelinePart === 1 ? 2 : 1;
+  const otherTl = TIMELINE_DATA[otherPart];
 
   let html = `
     <div class="timeline-header fade-in">
-      <h2>时间线</h2>
-      <p>2019年8月 — 11月 &middot; 点击事件跳转阅读</p>
+      <h2>剧情时间线</h2>
+      <div class="timeline-tabs">
+        <button class="timeline-tab ${_currentTimelinePart === 1 ? 'active' : ''}" onclick="showTimeline(1)">Part 1 · ${TIMELINE_DATA[1].label}</button>
+        <button class="timeline-tab ${_currentTimelinePart === 2 ? 'active' : ''}" onclick="showTimeline(2)">Part 2 · ${TIMELINE_DATA[2].label}</button>
+      </div>
+      <p>${tl.range} &middot; 点击事件跳转阅读</p>
     </div>
     <div class="timeline-container">
       <div class="timeline-line"></div>
   `;
 
-  timelineEvents.forEach(ev => {
+  tl.events.forEach(ev => {
     const clickable = ev.id && ev.hasContent;
     html += `
       <div class="timeline-event" ${clickable ? `onclick="openContent('${ev.id}')"` : ''}>
