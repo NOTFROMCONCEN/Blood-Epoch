@@ -4,157 +4,681 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2019 血疫纪元</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg-base: #1a1c20;
+  --bg-surface: #20222a;
+  --bg-elevated: #282a32;
+  --bg-card: #24262c;
+  --text-primary: #ccc8c0;
+  --text-secondary: #8a8580;
+  --text-dim: #5a5550;
+  --accent: #5baa7e;
+  --accent-dim: rgba(91,170,126,0.45);
+  --border: rgba(255,255,255,0.07);
+  --radius-md: 8px;
+}
+
+/* ===== RESET & BASE ===== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { font-size: 16px; }
+html { font-size: 16px; scroll-behavior: smooth; }
 body {
   font-family: 'Noto Sans SC', sans-serif;
-  background: #0c0c10;
-  color: #dcdce4;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+::selection { background: rgba(91,170,126,0.35); color: var(--text-primary); }
+:focus-visible { outline: 2px solid rgba(91,170,126,0.5); outline-offset: 2px; }
+
+/* ===== LOADING SCREEN ===== */
+.loading-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg-base);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+.loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loading-logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 2rem; color: var(--text-primary);
+  letter-spacing: 0.15em; margin-bottom: 2rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.loading-bar {
+  width: 200px; height: 2px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 2px; overflow: hidden;
+}
+.loading-bar::after {
+  content: ''; display: block;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(91,170,126,0.8), transparent);
+  animation: loading 1.5s ease-in-out infinite;
+}
+@keyframes loading {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   overflow: hidden;
-  height: 100vh;
+  background: #12141a;
 }
-::selection { background: rgba(200,40,40,0.45); color: #fff; }
+#canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0.5;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(18,20,26,0.2) 0%, rgba(18,20,26,0.85) 65%, rgba(18,20,26,0.98) 100%);
+  pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center; padding: 2rem;
+  max-width: 800px;
+}
+.hero-date {
+  font-size: 0.8rem; letter-spacing: 0.6em;
+  color: rgba(91,170,126,0.55); margin-bottom: 2rem;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  opacity: 0; animation: fadeInUp 0.8s ease 0.3s forwards;
+}
+.hero-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 700; color: #e0dcd4;
+  letter-spacing: 0.2em; margin-bottom: 0.3em;
+  text-shadow: 0 0 60px rgba(91,170,126,0.35), 0 0 120px rgba(91,170,126,0.12);
+  animation: titleGlow 4s ease-in-out infinite, fadeInUp 0.8s ease 0.5s both;
+}
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 60px rgba(91,170,126,0.35), 0 0 120px rgba(91,170,126,0.12); }
+  50% { text-shadow: 0 0 80px rgba(91,170,126,0.5), 0 0 160px rgba(91,170,126,0.18), 0 0 240px rgba(91,170,126,0.06); }
+}
+.hero-sub {
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  color: var(--text-dim); margin-bottom: 3rem;
+  letter-spacing: 0.4em; font-weight: 300;
+  opacity: 0; animation: fadeInUp 0.8s ease 0.7s forwards;
+}
+.hero-enter {
+  display: inline-block; padding: 1em 4em;
+  border: 1px solid rgba(91,170,126,0.3);
+  color: var(--text-secondary);
+  font-size: 0.9rem; letter-spacing: 0.4em;
+  cursor: pointer; background: transparent;
+  font-family: 'Noto Sans SC', sans-serif;
+  transition: all 0.4s ease; position: relative;
+  overflow: hidden; text-decoration: none;
+  border-radius: 2px;
+  opacity: 0; animation: fadeInUp 0.8s ease 0.9s forwards;
+}
+.hero-enter::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(91,170,126,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+.hero-enter:hover {
+  border-color: var(--accent);
+  color: #e0dcd4;
+  box-shadow: 0 0 25px rgba(91,170,126,0.2);
+  background: rgba(91,170,126,0.05);
+}
+.hero-enter:hover::before { transform: translateX(100%); }
+.hero-enter:active { transform: scale(0.97); }
 
-/* Focus */
-:focus-visible {
-  outline: 2px solid rgba(200,40,40,0.5);
-  outline-offset: 2px;
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Reduced motion */
+/* ===== SCROLL INDICATOR ===== */
+.scroll-indicator {
+  position: absolute; bottom: 3rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.5rem;
+  opacity: 0; animation: fadeInUp 0.8s ease 1.2s forwards;
+}
+.scroll-indicator span {
+  font-size: 0.7rem; color: var(--text-dim);
+  letter-spacing: 0.2em;
+}
+.scroll-arrow {
+  width: 20px; height: 20px;
+  border-right: 1px solid rgba(91,170,126,0.35);
+  border-bottom: 1px solid rgba(91,170,126,0.35);
+  transform: rotate(45deg);
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.35; }
+  50% { transform: rotate(45deg) translateY(8px); opacity: 0.7; }
+}
+
+/* ===== QUOTE SECTION ===== */
+.quote-section {
+  padding: 6rem 2rem;
+  background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-surface) 100%);
+  position: relative;
+}
+.quote-container {
+  max-width: 700px; margin: 0 auto;
+  text-align: center;
+}
+.quote-mark {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 4rem; color: rgba(91,170,126,0.18);
+  line-height: 1; margin-bottom: 1rem;
+}
+.quote-text {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: var(--text-secondary);
+  line-height: 2; letter-spacing: 0.05em;
+  font-style: italic;
+}
+.quote-author {
+  margin-top: 2rem;
+  font-size: 0.8rem; color: rgba(91,170,126,0.45);
+  letter-spacing: 0.15em;
+}
+
+/* ===== CHAPTERS SECTION ===== */
+.chapters-section {
+  padding: 6rem 2rem;
+  background: var(--bg-base);
+}
+.section-header {
+  text-align: center; margin-bottom: 4rem;
+}
+.section-label {
+  font-size: 0.7rem; letter-spacing: 0.4em;
+  color: rgba(91,170,126,0.45); margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+.section-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: var(--text-primary); letter-spacing: 0.1em;
+}
+.section-divider {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(91,170,126,0.35), transparent);
+  margin: 1.5rem auto 0;
+}
+
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem; max-width: 1200px;
+  margin: 0 auto;
+}
+.chapter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.chapter-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(91,170,126,0.45), transparent);
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.chapter-card:hover {
+  background: #2e3038;
+  border-color: rgba(91,170,126,0.18);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+.chapter-card:hover::before { opacity: 1; }
+.chapter-part {
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  color: rgba(91,170,126,0.45); margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+.chapter-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.2rem; color: var(--text-primary);
+  margin-bottom: 0.8rem; line-height: 1.4;
+}
+.chapter-desc {
+  font-size: 0.85rem; color: var(--text-dim);
+  line-height: 1.7; margin-bottom: 1rem;
+}
+.chapter-meta {
+  display: flex; gap: 1rem;
+  font-size: 0.7rem; color: #4a4640;
+}
+.chapter-meta span {
+  display: flex; align-items: center; gap: 0.3rem;
+}
+
+/* ===== CHARACTERS SECTION ===== */
+.characters-section {
+  padding: 6rem 2rem;
+  background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-surface) 100%);
+}
+.characters-scroll {
+  display: flex; gap: 2rem;
+  overflow-x: auto; padding: 2rem 0;
+  max-width: 1200px; margin: 0 auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(91,170,126,0.15) transparent;
+}
+.characters-scroll::-webkit-scrollbar { height: 4px; }
+.characters-scroll::-webkit-scrollbar-track { background: transparent; }
+.characters-scroll::-webkit-scrollbar-thumb {
+  background: rgba(91,170,126,0.15);
+  border-radius: 2px;
+}
+.character-card {
+  flex: 0 0 280px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+.character-card:hover {
+  border-color: rgba(91,170,126,0.14);
+  background: #2e3038;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.character-avatar {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(91,170,126,0.18), rgba(90,140,191,0.18));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.5rem; color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+.character-name {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.1rem; color: var(--text-primary);
+  margin-bottom: 0.3rem;
+}
+.character-role {
+  font-size: 0.7rem; color: rgba(91,170,126,0.45);
+  letter-spacing: 0.1em; margin-bottom: 0.8rem;
+}
+.character-desc {
+  font-size: 0.8rem; color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ===== STATS SECTION ===== */
+.stats-section {
+  padding: 4rem 2rem;
+  background: var(--bg-base);
+  border-top: 1px solid var(--border);
+}
+.stats-grid {
+  display: flex; justify-content: center;
+  gap: 4rem; flex-wrap: wrap;
+  max-width: 800px; margin: 0 auto;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 2.5rem; color: rgba(91,170,126,0.65);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.75rem; color: var(--text-dim);
+  letter-spacing: 0.15em; margin-top: 0.5rem;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  padding: 3rem 2rem;
+  background: #15171b;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.footer-text {
+  font-size: 0.75rem; color: #3a3832;
+  letter-spacing: 0.1em;
+}
+.footer-links {
+  display: flex; justify-content: center;
+  gap: 2rem; margin-top: 1rem;
+}
+.footer-links a {
+  font-size: 0.7rem; color: rgba(91,170,126,0.35);
+  text-decoration: none; letter-spacing: 0.1em;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: rgba(91,170,126,0.75); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero-content { padding: 1.5rem; }
+  .chapters-grid { grid-template-columns: 1fr; }
+  .stats-grid { gap: 2rem; }
+  .stat-num { font-size: 2rem; }
+  .characters-scroll { padding: 1rem; }
+  .character-card { flex: 0 0 240px; }
+}
+
+/* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
 }
-
-.landing {
-  position: fixed; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  background: #0c0c10;
-}
-#canvas {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-}
-.content {
-  position: relative; z-index: 2;
-  text-align: center; padding: 2rem;
-}
-.date {
-  font-size: 0.85rem; letter-spacing: 0.5em;
-  color: rgba(220,50,50,0.7); margin-bottom: 2rem;
-  font-family: 'Courier New', monospace;
-  text-transform: uppercase;
-}
-.title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: clamp(2.5rem, 8vw, 5.5rem);
-  font-weight: 700; color: #e8e8f0;
-  letter-spacing: 0.15em; margin-bottom: 0.3em;
-  text-shadow: 0 0 60px rgba(200,40,40,0.4);
-  animation: pulse 4s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { text-shadow: 0 0 60px rgba(200,40,40,0.4); }
-  50% { text-shadow: 0 0 80px rgba(200,40,40,0.6), 0 0 120px rgba(200,40,40,0.25); }
-}
-.sub {
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  color: rgba(220,220,228,0.55); margin-bottom: 4rem;
-  letter-spacing: 0.3em; font-weight: 300;
-}
-.enter {
-  display: inline-block; padding: 0.8em 3em;
-  border: 1px solid rgba(200,40,40,0.5);
-  color: rgba(220,220,228,0.8);
-  font-size: 0.9rem; letter-spacing: 0.3em;
-  cursor: pointer; background: transparent;
-  font-family: 'Noto Sans SC', sans-serif;
-  transition: all 0.4s ease; position: relative; overflow: hidden;
-  text-decoration: none;
-}
-.enter::before {
-  content: ''; position: absolute; inset: 0;
-  background: rgba(200,40,40,0.1);
-  transform: translateX(-100%);
-  transition: transform 0.4s ease;
-}
-.enter:hover { border-color: rgba(200,40,40,0.9); color: #f8f8ff; }
-.enter:hover::before { transform: translateX(0); }
-.enter:active { transform: scale(0.97); }
-
-.quote {
-  position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
-  font-size: 0.75rem; color: rgba(220,220,228,0.35);
-  letter-spacing: 0.2em; text-align: center; width: 90%;
-  font-style: italic;
-}
 </style>
+<meta name="theme-color" content="#1a1c20">
+<meta name="description" content="2019 血疫纪元 - 一场以博览会为伪装的基因武器袭击">
+<meta name="color-scheme" content="dark">
 </head>
 <body>
 
-<div class="landing">
-  <canvas id="canvas"></canvas>
-  <div class="content">
-    <div class="date">X CITY &mdash; NOVEMBER 2019</div>
-    <h1 class="title">血疫纪元</h1>
-    <div class="sub">2019</div>
-    <a class="enter" href="app.html">&emsp;进 入&emsp;</a>
-  </div>
-  <div class="quote">"世界需要安宁，而我们，负责带来这种安宁。不惜任何代价。"</div>
+<!-- Loading Screen -->
+<div class="loading-screen" id="loading">
+  <div class="loading-logo">血疫纪元</div>
+  <div class="loading-bar"></div>
 </div>
 
+<!-- Hero Section -->
+<section class="hero">
+  <canvas id="canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-date">X CITY &mdash; NOVEMBER 2019</div>
+    <h1 class="hero-title">血疫纪元</h1>
+    <div class="hero-sub">2 0 1 9</div>
+    <a class="hero-enter" href="app.html">&emsp;进 入&emsp;</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>SCROLL</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- Quote Section -->
+<section class="quote-section">
+  <div class="quote-container">
+    <div class="quote-mark">"</div>
+    <p class="quote-text">世界需要安宁，而我们，负责带来这种安宁。不惜任何代价。</p>
+    <div class="quote-author">&mdash; 永生树集团 创始人</div>
+  </div>
+</section>
+
+<!-- Chapters Section -->
+<section class="chapters-section">
+  <div class="section-header">
+    <div class="section-label">Story</div>
+    <h2 class="section-title">章节导航</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="chapters-grid">
+    <a href="app.html" class="chapter-card" style="text-decoration:none;">
+      <div class="chapter-part">Part 01</div>
+      <div class="chapter-title">血疫爆发</div>
+      <div class="chapter-desc">从盖亚之巢启动到X市全面封锁，一场以博览会为伪装的基因武器袭击。</div>
+      <div class="chapter-meta">
+        <span>18 章</span>
+        <span>·</span>
+        <span>起源 · 酒店 · 3号楼</span>
+      </div>
+    </a>
+    <a href="app.html" class="chapter-card" style="text-decoration:none;">
+      <div class="chapter-part">Part 02</div>
+      <div class="chapter-title">暗影反击</div>
+      <div class="chapter-desc">档案员的逃亡与反击，季风的暗中调查，圣女计划的政治博弈。</div>
+      <div class="chapter-meta">
+        <span>5 章已写</span>
+        <span>·</span>
+        <span>幸存者 · 暗网 · 圣女</span>
+      </div>
+    </a>
+    <a href="radio.html" class="chapter-card" style="text-decoration:none;">
+      <div class="chapter-part">FM 101.7</div>
+      <div class="chapter-title">电台档案</div>
+      <div class="chapter-desc">危机爆发前的电台录音，记录了城市最后的声音。</div>
+      <div class="chapter-meta">
+        <span>2 期</span>
+        <span>·</span>
+        <span>大桥事故 · 交通节目</span>
+      </div>
+    </a>
+    <a href="news.html" class="chapter-card" style="text-decoration:none;">
+      <div class="chapter-part">Archive</div>
+      <div class="chapter-title">新闻档案</div>
+      <div class="chapter-desc">X市商报、晨报、晚报的原始报道，官方叙事与真相的裂隙。</div>
+      <div class="chapter-meta">
+        <span>3 份</span>
+        <span>·</span>
+        <span>2019.09 - 2019.11</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Characters Section -->
+<section class="characters-section">
+  <div class="section-header">
+    <div class="section-label">Characters</div>
+    <h2 class="section-title">关键人物</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="characters-scroll">
+    <div class="character-card">
+      <div class="character-avatar">K</div>
+      <div class="character-name">档案员</div>
+      <div class="character-role">K-8 · The Archivist</div>
+      <div class="character-desc">3号楼唯一的幸存者，大脑中存储着137位居民的全部记忆。携带着揭露真相的钥匙。</div>
+    </div>
+    <div class="character-card">
+      <div class="character-avatar">季</div>
+      <div class="character-name">季风</div>
+      <div class="character-role">国安部第十一局 · 调查员</div>
+      <div class="character-desc">在永生树集团的阴影下追查真相。她是连接第7工作组与外部世界的桥梁。</div>
+    </div>
+    <div class="character-card">
+      <div class="character-avatar">M</div>
+      <div class="character-name">M-10</div>
+      <div class="character-role">第7工作组 · 清洁工小队长</div>
+      <div class="character-desc">执行赫淮斯托斯协议的人。他亲手摧毁了幸福里3号楼的菌丝网络。</div>
+    </div>
+    <div class="character-card">
+      <div class="character-avatar">A</div>
+      <div class="character-name">A-01 圣女</div>
+      <div class="character-role">圣女计划 · 实验对象</div>
+      <div class="character-desc">体内产生"甘露"——能让感染者瞬间安静的神经诱导化合物。完美的社会控制工具。</div>
+    </div>
+    <div class="character-card">
+      <div class="character-avatar">母</div>
+      <div class="character-name">母亲</div>
+      <div class="character-role">盖亚意识 · Project Gaia's Nest</div>
+      <div class="character-desc">失控的集体意识网络。通过菌丝同化人类，将自由意志替换为"静默管理"。</div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-num">47,000+</div>
+      <div class="stat-label">已确认感染者</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">128,000+</div>
+      <div class="stat-label">疑似感染</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">15,000+</div>
+      <div class="stat-label">死亡人数</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">137</div>
+      <div class="stat-label">3号楼遇难者</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-text">2019 血疫纪元 &copy; 档案解密</div>
+  <div class="footer-links">
+    <a href="app.html">进入阅读</a>
+    <a href="radio.html">电台档案</a>
+    <a href="news.html">新闻档案</a>
+  </div>
+</footer>
+
 <script>
+// ===== LOADING SCREEN =====
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loading').classList.add('hidden');
+  }, 1200);
+});
+
+// ===== PARTICLE CANVAS =====
 (function() {
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let w, h, particles = [];
+  let animationId = null;
+  let isVisible = true;
 
   function resize() {
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
   }
-  window.addEventListener('resize', resize);
-  resize();
 
-  for (let i = 0; i < 60; i++) {
-    particles.push({
-      x: Math.random() * w, y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: -Math.random() * 0.4 - 0.1,
-      r: Math.random() * 1.5 + 0.3,
-      a: Math.random() * 0.15 + 0.02,
-      color: Math.random() > 0.5 ? '180,30,30' : '100,140,200'
-    });
+  function createParticles() {
+    particles = [];
+    const count = Math.min(80, Math.floor(w * h / 15000));
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: -Math.random() * 0.3 - 0.05,
+        r: Math.random() * 1.8 + 0.2,
+        a: Math.random() * 0.15 + 0.03,
+        color: Math.random() > 0.6 ? '160,40,40' : '70,100,160'
+      });
+    }
   }
 
-  var rafId = null;
   function draw() {
+    if (!isVisible) return;
     ctx.clearRect(0, 0, w, h);
     particles.forEach(p => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(' + p.color + ',' + p.a + ')';
+      ctx.fillStyle = `rgba(${p.color},${p.a})`;
       ctx.fill();
-      p.x += p.vx; p.y += p.vy;
+      p.x += p.vx;
+      p.y += p.vy;
       if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
       if (p.x < -10) p.x = w + 10;
       if (p.x > w + 10) p.x = -10;
     });
-    rafId = requestAnimationFrame(draw);
+    animationId = requestAnimationFrame(draw);
   }
-  draw();
 
-  // Pause animation when tab is hidden
+  function init() {
+    resize();
+    createParticles();
+    draw();
+  }
+
+  window.addEventListener('resize', () => {
+    resize();
+    createParticles();
+  });
+
+  // Pause when tab hidden
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { cancelAnimationFrame(rafId); rafId = null; }
-    else if (!rafId) draw();
+    isVisible = !document.hidden;
+    if (isVisible && !animationId) draw();
+    else if (!isVisible && animationId) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+  });
+
+  // Pause when scrolled past hero
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.target === canvas.parentElement) {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animationId) draw();
+        else if (!isVisible && animationId) {
+          cancelAnimationFrame(animationId);
+          animationId = null;
+        }
+      }
+    });
+  }, { threshold: 0.1 });
+
+  init();
+  observer.observe(canvas.parentElement);
+})();
+
+// ===== SCROLL ANIMATIONS =====
+(function() {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.chapter-card, .character-card, .stat-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
   });
 })();
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
 </script>
 
 </body>

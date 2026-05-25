@@ -1,25 +1,50 @@
-/* ===== common.css — Shared styles for 2019血疫纪元 website ===== */
+/* ===== common.css — 2019血疫纪元 — Modern Dark Theme ===== */
+
+:root {
+  --bg-base: #1a1c20;
+  --bg-surface: #20222a;
+  --bg-elevated: #282a32;
+  --bg-card: #24262c;
+  --text-primary: #ccc8c0;
+  --text-secondary: #8a8580;
+  --text-dim: #5a5550;
+  --accent: #5baa7e;
+  --accent-glow: rgba(91,170,126,0.15);
+  --accent-dim: rgba(91,170,126,0.45);
+  --accent-warm: #d4944a;
+  --accent-blue: #5a8cbf;
+  --accent-red: #c45c5c;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.14);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition: 0.25s ease;
+  --font-serif: 'Noto Serif SC', 'Georgia', serif;
+  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'Courier New', monospace;
+}
 
 /* Reset */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 16px; scroll-behavior: smooth; }
 
 /* Selection */
-::selection { background: rgba(200,40,40,0.45); color: #fff; }
+::selection { background: rgba(91,170,126,0.35); color: var(--text-primary); }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(200,40,40,0.3); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(200,40,40,0.5); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
 
-/* Focus styles for accessibility */
+/* Focus styles */
 :focus-visible {
-  outline: 2px solid rgba(200,40,40,0.5);
+  outline: 2px solid rgba(91,170,126,0.5);
   outline-offset: 2px;
 }
 button:focus-visible, a:focus-visible {
-  outline: 2px solid rgba(200,40,40,0.7);
+  outline: 2px solid rgba(91,170,126,0.6);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -34,39 +59,43 @@ button:focus-visible, a:focus-visible {
   html { scroll-behavior: auto; }
 }
 
-/* Common body setup (can be overridden per-page) */
+/* Body */
 body {
-  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: #0c0c10;
-  color: #dcdce4;
+  font-family: var(--font-sans);
+  background: var(--bg-base);
+  color: var(--text-primary);
   overflow-x: hidden;
   min-height: 100vh;
+  line-height: 1.6;
 }
 
-/* Page header (shared across radio, news, landing) */
+/* Page header */
 .page-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0.8rem 2rem;
-  background: rgba(10,10,14,0.95);
-  border-bottom: 1px solid rgba(200,40,40,0.12);
-  backdrop-filter: blur(10px);
+  background: rgba(26,28,32,0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .page-header .logo {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 0.9rem; color: #e8e8f0;
+  font-family: var(--font-serif);
+  font-size: 0.9rem; color: var(--text-primary);
   cursor: pointer; text-decoration: none;
+  letter-spacing: 0.05em;
 }
-.page-header .logo span { color: rgba(200,40,40,0.8); }
+.page-header .logo span { color: var(--accent); }
 .page-header .nav-links {
-  display: flex; gap: 1rem; align-items: center;
+  display: flex; gap: 1.2rem; align-items: center;
 }
 .page-header .nav-links a {
-  font-size: 0.75rem; color: rgba(220,220,228,0.5);
+  font-size: 0.75rem; color: var(--text-dim);
   text-decoration: none; transition: color 0.3s;
+  letter-spacing: 0.05em;
 }
-.page-header .nav-links a:hover { color: rgba(200,40,40,0.8); }
-.page-header .nav-links a.active { color: rgba(200,40,40,0.7); }
+.page-header .nav-links a:hover { color: var(--accent); }
+.page-header .nav-links a.active { color: var(--accent-dim); }
 
 /* Fade-in animation */
 @keyframes fadeIn {
@@ -79,12 +108,13 @@ body {
 .toast {
   position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
   padding: 0.6rem 1.5rem;
-  background: rgba(14,14,18,0.95);
-  border: 1px solid rgba(200,40,40,0.3);
-  border-radius: 6px;
-  color: rgba(220,220,228,0.8);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
   font-size: 0.82rem;
   z-index: 999;
   animation: fadeIn 0.3s ease;
   pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }

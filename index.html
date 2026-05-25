@@ -7,38 +7,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-/* ===== CSS VARIABLES ===== */
-:root {
-  --bg-base: #1a1c20;
-  --bg-surface: #20222a;
-  --bg-elevated: #282a32;
-  --bg-card: #24262c;
-  --text-primary: #ccc8c0;
-  --text-secondary: #8a8580;
-  --text-dim: #5a5550;
-  --accent: #5baa7e;
-  --accent-dim: rgba(91,170,126,0.45);
-  --border: rgba(255,255,255,0.07);
-  --radius-md: 8px;
-}
-
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 16px; scroll-behavior: smooth; }
 body {
   font-family: 'Noto Sans SC', sans-serif;
-  background: var(--bg-base);
-  color: var(--text-primary);
+  background: #f8f5ee;
+  color: #4a4a4a;
   min-height: 100vh;
   overflow-x: hidden;
 }
-::selection { background: rgba(91,170,126,0.35); color: var(--text-primary); }
-:focus-visible { outline: 2px solid rgba(91,170,126,0.5); outline-offset: 2px; }
+::selection { background: rgba(46,160,67,0.45); color: #fff; }
+:focus-visible { outline: 2px solid rgba(46,160,67,0.5); outline-offset: 2px; }
 
 /* ===== LOADING SCREEN ===== */
 .loading-screen {
   position: fixed; inset: 0; z-index: 9999;
-  background: var(--bg-base);
+  background: #f8f5ee;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   transition: opacity 0.8s ease, visibility 0.8s ease;
@@ -46,23 +31,19 @@ body {
 .loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 .loading-logo {
   font-family: 'Noto Serif SC', serif;
-  font-size: 2rem; color: var(--text-primary);
+  font-size: 2rem; color: #3a3a3a;
   letter-spacing: 0.15em; margin-bottom: 2rem;
   animation: pulse 2s ease-in-out infinite;
 }
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
 .loading-bar {
   width: 200px; height: 2px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.1);
   border-radius: 2px; overflow: hidden;
 }
 .loading-bar::after {
   content: ''; display: block;
   width: 40%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(91,170,126,0.8), transparent);
+  background: linear-gradient(90deg, transparent, rgba(46,160,67,0.8), transparent);
   animation: loading 1.5s ease-in-out infinite;
 }
 @keyframes loading {
@@ -76,16 +57,15 @@ body {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   overflow: hidden;
-  background: #12141a;
 }
 #canvas {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 .hero-overlay {
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, rgba(18,20,26,0.2) 0%, rgba(18,20,26,0.85) 65%, rgba(18,20,26,0.98) 100%);
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(10,10,15,0.8) 70%, rgba(10,10,15,1) 100%);
   pointer-events: none;
 }
 .hero-content {
@@ -95,7 +75,7 @@ body {
 }
 .hero-date {
   font-size: 0.8rem; letter-spacing: 0.6em;
-  color: rgba(91,170,126,0.55); margin-bottom: 2rem;
+  color: rgba(46,160,67,0.7); margin-bottom: 2rem;
   font-family: 'Courier New', monospace;
   text-transform: uppercase;
   opacity: 0; animation: fadeInUp 0.8s ease 0.3s forwards;
@@ -103,44 +83,42 @@ body {
 .hero-title {
   font-family: 'Noto Serif SC', serif;
   font-size: clamp(3rem, 10vw, 6rem);
-  font-weight: 700; color: #e0dcd4;
+  font-weight: 700; color: #333333;
   letter-spacing: 0.2em; margin-bottom: 0.3em;
-  text-shadow: 0 0 60px rgba(91,170,126,0.35), 0 0 120px rgba(91,170,126,0.12);
+  text-shadow: 0 0 80px rgba(46,160,67,0.5), 0 0 160px rgba(46,160,67,0.2);
   animation: titleGlow 4s ease-in-out infinite, fadeInUp 0.8s ease 0.5s both;
 }
 @keyframes titleGlow {
-  0%, 100% { text-shadow: 0 0 60px rgba(91,170,126,0.35), 0 0 120px rgba(91,170,126,0.12); }
-  50% { text-shadow: 0 0 80px rgba(91,170,126,0.5), 0 0 160px rgba(91,170,126,0.18), 0 0 240px rgba(91,170,126,0.06); }
+  0%, 100% { text-shadow: 0 0 80px rgba(46,160,67,0.5), 0 0 160px rgba(46,160,67,0.2); }
+  50% { text-shadow: 0 0 100px rgba(46,160,67,0.7), 0 0 200px rgba(46,160,67,0.3), 0 0 300px rgba(46,160,67,0.1); }
 }
 .hero-sub {
   font-size: clamp(1rem, 3vw, 1.3rem);
-  color: var(--text-dim); margin-bottom: 3rem;
+  color: rgba(100,100,100,0.5); margin-bottom: 3rem;
   letter-spacing: 0.4em; font-weight: 300;
   opacity: 0; animation: fadeInUp 0.8s ease 0.7s forwards;
 }
 .hero-enter {
   display: inline-block; padding: 1em 4em;
-  border: 1px solid rgba(91,170,126,0.3);
-  color: var(--text-secondary);
+  border: 1px solid rgba(46,160,67,0.5);
+  color: rgba(100,100,100,0.9);
   font-size: 0.9rem; letter-spacing: 0.4em;
   cursor: pointer; background: transparent;
   font-family: 'Noto Sans SC', sans-serif;
   transition: all 0.4s ease; position: relative;
   overflow: hidden; text-decoration: none;
-  border-radius: 2px;
   opacity: 0; animation: fadeInUp 0.8s ease 0.9s forwards;
 }
 .hero-enter::before {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(91,170,126,0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(46,160,67,0.15), transparent);
   transform: translateX(-100%);
   transition: transform 0.6s ease;
 }
 .hero-enter:hover {
-  border-color: var(--accent);
-  color: #e0dcd4;
-  box-shadow: 0 0 25px rgba(91,170,126,0.2);
-  background: rgba(91,170,126,0.05);
+  border-color: rgba(46,160,67,0.9);
+  color: #fff;
+  box-shadow: 0 0 30px rgba(46,160,67,0.3);
 }
 .hero-enter:hover::before { transform: translateX(100%); }
 .hero-enter:active { transform: scale(0.97); }
@@ -159,25 +137,25 @@ body {
   opacity: 0; animation: fadeInUp 0.8s ease 1.2s forwards;
 }
 .scroll-indicator span {
-  font-size: 0.7rem; color: var(--text-dim);
+  font-size: 0.7rem; color: rgba(100,100,100,0.3);
   letter-spacing: 0.2em;
 }
 .scroll-arrow {
   width: 20px; height: 20px;
-  border-right: 1px solid rgba(91,170,126,0.35);
-  border-bottom: 1px solid rgba(91,170,126,0.35);
+  border-right: 1px solid rgba(46,160,67,0.5);
+  border-bottom: 1px solid rgba(46,160,67,0.5);
   transform: rotate(45deg);
   animation: scrollBounce 2s ease-in-out infinite;
 }
 @keyframes scrollBounce {
-  0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.35; }
-  50% { transform: rotate(45deg) translateY(8px); opacity: 0.7; }
+  0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.5; }
+  50% { transform: rotate(45deg) translateY(8px); opacity: 1; }
 }
 
 /* ===== QUOTE SECTION ===== */
 .quote-section {
   padding: 6rem 2rem;
-  background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-surface) 100%);
+  background: linear-gradient(180deg, #f8f5ee 0%, #f0ede5 100%);
   position: relative;
 }
 .quote-container {
@@ -186,43 +164,43 @@ body {
 }
 .quote-mark {
   font-family: 'Noto Serif SC', serif;
-  font-size: 4rem; color: rgba(91,170,126,0.18);
+  font-size: 4rem; color: rgba(46,160,67,0.3);
   line-height: 1; margin-bottom: 1rem;
 }
 .quote-text {
   font-family: 'Noto Serif SC', serif;
   font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-  color: var(--text-secondary);
+  color: rgba(100,100,100,0.8);
   line-height: 2; letter-spacing: 0.05em;
   font-style: italic;
 }
 .quote-author {
   margin-top: 2rem;
-  font-size: 0.8rem; color: rgba(91,170,126,0.45);
+  font-size: 0.8rem; color: rgba(46,160,67,0.6);
   letter-spacing: 0.15em;
 }
 
 /* ===== CHAPTERS SECTION ===== */
 .chapters-section {
   padding: 6rem 2rem;
-  background: var(--bg-base);
+  background: #f8f5ee;
 }
 .section-header {
   text-align: center; margin-bottom: 4rem;
 }
 .section-label {
   font-size: 0.7rem; letter-spacing: 0.4em;
-  color: rgba(91,170,126,0.45); margin-bottom: 1rem;
+  color: rgba(46,160,67,0.6); margin-bottom: 1rem;
   text-transform: uppercase;
 }
 .section-title {
   font-family: 'Noto Serif SC', serif;
   font-size: clamp(1.8rem, 4vw, 2.5rem);
-  color: var(--text-primary); letter-spacing: 0.1em;
+  color: #3a3a3a; letter-spacing: 0.1em;
 }
 .section-divider {
   width: 60px; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(91,170,126,0.35), transparent);
+  background: linear-gradient(90deg, transparent, rgba(46,160,67,0.5), transparent);
   margin: 1.5rem auto 0;
 }
 
@@ -233,9 +211,9 @@ body {
   margin: 0 auto;
 }
 .chapter-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
   padding: 2rem;
   transition: all 0.4s ease;
   cursor: pointer;
@@ -245,33 +223,32 @@ body {
 .chapter-card::before {
   content: ''; position: absolute;
   top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(91,170,126,0.45), transparent);
+  background: linear-gradient(90deg, transparent, rgba(46,160,67,0.5), transparent);
   opacity: 0; transition: opacity 0.4s ease;
 }
 .chapter-card:hover {
-  background: #2e3038;
-  border-color: rgba(91,170,126,0.18);
+  background: rgba(46,160,67,0.05);
+  border-color: rgba(46,160,67,0.2);
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
 }
 .chapter-card:hover::before { opacity: 1; }
 .chapter-part {
   font-size: 0.65rem; letter-spacing: 0.2em;
-  color: rgba(91,170,126,0.45); margin-bottom: 0.8rem;
+  color: rgba(46,160,67,0.6); margin-bottom: 0.8rem;
   text-transform: uppercase;
 }
 .chapter-title {
   font-family: 'Noto Serif SC', serif;
-  font-size: 1.2rem; color: var(--text-primary);
+  font-size: 1.2rem; color: #3a3a3a;
   margin-bottom: 0.8rem; line-height: 1.4;
 }
 .chapter-desc {
-  font-size: 0.85rem; color: var(--text-dim);
+  font-size: 0.85rem; color: rgba(100,100,100,0.5);
   line-height: 1.7; margin-bottom: 1rem;
 }
 .chapter-meta {
   display: flex; gap: 1rem;
-  font-size: 0.7rem; color: #4a4640;
+  font-size: 0.7rem; color: rgba(100,100,100,0.35);
 }
 .chapter-meta span {
   display: flex; align-items: center; gap: 0.3rem;
@@ -280,62 +257,61 @@ body {
 /* ===== CHARACTERS SECTION ===== */
 .characters-section {
   padding: 6rem 2rem;
-  background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-surface) 100%);
+  background: linear-gradient(180deg, #f8f5ee 0%, #ebe8e0 100%);
 }
 .characters-scroll {
   display: flex; gap: 2rem;
   overflow-x: auto; padding: 2rem 0;
   max-width: 1200px; margin: 0 auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(91,170,126,0.15) transparent;
+  scrollbar-color: rgba(46,160,67,0.3) transparent;
 }
 .characters-scroll::-webkit-scrollbar { height: 4px; }
 .characters-scroll::-webkit-scrollbar-track { background: transparent; }
 .characters-scroll::-webkit-scrollbar-thumb {
-  background: rgba(91,170,126,0.15);
+  background: rgba(46,160,67,0.3);
   border-radius: 2px;
 }
 .character-card {
   flex: 0 0 280px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
   padding: 1.5rem;
   transition: all 0.3s ease;
 }
 .character-card:hover {
-  border-color: rgba(91,170,126,0.14);
-  background: #2e3038;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  border-color: rgba(46,160,67,0.2);
+  background: rgba(46,160,67,0.03);
 }
 .character-avatar {
   width: 60px; height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(91,170,126,0.18), rgba(90,140,191,0.18));
+  background: linear-gradient(135deg, rgba(46,160,67,0.3), rgba(100,140,200,0.3));
   display: flex; align-items: center; justify-content: center;
   font-family: 'Noto Serif SC', serif;
-  font-size: 1.5rem; color: var(--text-primary);
+  font-size: 1.5rem; color: #3a3a3a;
   margin-bottom: 1rem;
 }
 .character-name {
   font-family: 'Noto Serif SC', serif;
-  font-size: 1.1rem; color: var(--text-primary);
+  font-size: 1.1rem; color: #3a3a3a;
   margin-bottom: 0.3rem;
 }
 .character-role {
-  font-size: 0.7rem; color: rgba(91,170,126,0.45);
+  font-size: 0.7rem; color: rgba(46,160,67,0.6);
   letter-spacing: 0.1em; margin-bottom: 0.8rem;
 }
 .character-desc {
-  font-size: 0.8rem; color: var(--text-dim);
+  font-size: 0.8rem; color: rgba(100,100,100,0.5);
   line-height: 1.6;
 }
 
 /* ===== STATS SECTION ===== */
 .stats-section {
   padding: 4rem 2rem;
-  background: var(--bg-base);
-  border-top: 1px solid var(--border);
+  background: #f8f5ee;
+  border-top: 1px solid rgba(255,255,255,0.05);
 }
 .stats-grid {
   display: flex; justify-content: center;
@@ -345,23 +321,23 @@ body {
 .stat-item { text-align: center; }
 .stat-num {
   font-family: 'Noto Serif SC', serif;
-  font-size: 2.5rem; color: rgba(91,170,126,0.65);
+  font-size: 2.5rem; color: rgba(46,160,67,0.8);
   line-height: 1;
 }
 .stat-label {
-  font-size: 0.75rem; color: var(--text-dim);
+  font-size: 0.75rem; color: rgba(100,100,100,0.4);
   letter-spacing: 0.15em; margin-top: 0.5rem;
 }
 
 /* ===== FOOTER ===== */
 .footer {
   padding: 3rem 2rem;
-  background: #15171b;
-  border-top: 1px solid var(--border);
+  background: #ffffff;
+  border-top: 1px solid rgba(255,255,255,0.05);
   text-align: center;
 }
 .footer-text {
-  font-size: 0.75rem; color: #3a3832;
+  font-size: 0.75rem; color: rgba(100,100,100,0.3);
   letter-spacing: 0.1em;
 }
 .footer-links {
@@ -369,11 +345,11 @@ body {
   gap: 2rem; margin-top: 1rem;
 }
 .footer-links a {
-  font-size: 0.7rem; color: rgba(91,170,126,0.35);
+  font-size: 0.7rem; color: rgba(46,160,67,0.5);
   text-decoration: none; letter-spacing: 0.1em;
   transition: color 0.3s;
 }
-.footer-links a:hover { color: rgba(91,170,126,0.75); }
+.footer-links a:hover { color: rgba(46,160,67,0.9); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
@@ -393,9 +369,9 @@ body {
   }
 }
 </style>
-<meta name="theme-color" content="#1a1c20">
+<meta name="theme-color" content="#f8f5ee">
 <meta name="description" content="2019 血疫纪元 - 一场以博览会为伪装的基因武器袭击">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light">
 </head>
 <body>
 
@@ -413,7 +389,7 @@ body {
     <div class="hero-date">X CITY &mdash; NOVEMBER 2019</div>
     <h1 class="hero-title">血疫纪元</h1>
     <div class="hero-sub">2 0 1 9</div>
-    <a class="hero-enter" href="app.html">&emsp;进 入&emsp;</a>
+    <a class="hero-enter" href="docs/app.html">&emsp;进 入&emsp;</a>
   </div>
   <div class="scroll-indicator">
     <span>SCROLL</span>
@@ -438,7 +414,7 @@ body {
     <div class="section-divider"></div>
   </div>
   <div class="chapters-grid">
-    <a href="app.html" class="chapter-card" style="text-decoration:none;">
+    <a href="docs/app.html" class="chapter-card" style="text-decoration:none;">
       <div class="chapter-part">Part 01</div>
       <div class="chapter-title">血疫爆发</div>
       <div class="chapter-desc">从盖亚之巢启动到X市全面封锁，一场以博览会为伪装的基因武器袭击。</div>
@@ -448,7 +424,7 @@ body {
         <span>起源 · 酒店 · 3号楼</span>
       </div>
     </a>
-    <a href="app.html" class="chapter-card" style="text-decoration:none;">
+    <a href="docs/app.html" class="chapter-card" style="text-decoration:none;" onclick="setTimeout(()=>switchPart(2),100)">
       <div class="chapter-part">Part 02</div>
       <div class="chapter-title">暗影反击</div>
       <div class="chapter-desc">档案员的逃亡与反击，季风的暗中调查，圣女计划的政治博弈。</div>
@@ -458,7 +434,7 @@ body {
         <span>幸存者 · 暗网 · 圣女</span>
       </div>
     </a>
-    <a href="radio.html" class="chapter-card" style="text-decoration:none;">
+    <a href="docs/radio.html" class="chapter-card" style="text-decoration:none;">
       <div class="chapter-part">FM 101.7</div>
       <div class="chapter-title">电台档案</div>
       <div class="chapter-desc">危机爆发前的电台录音，记录了城市最后的声音。</div>
@@ -468,7 +444,7 @@ body {
         <span>大桥事故 · 交通节目</span>
       </div>
     </a>
-    <a href="news.html" class="chapter-card" style="text-decoration:none;">
+    <a href="docs/news.html" class="chapter-card" style="text-decoration:none;">
       <div class="chapter-part">Archive</div>
       <div class="chapter-title">新闻档案</div>
       <div class="chapter-desc">X市商报、晨报、晚报的原始报道，官方叙事与真相的裂隙。</div>
@@ -548,9 +524,9 @@ body {
 <footer class="footer">
   <div class="footer-text">2019 血疫纪元 &copy; 档案解密</div>
   <div class="footer-links">
-    <a href="app.html">进入阅读</a>
-    <a href="radio.html">电台档案</a>
-    <a href="news.html">新闻档案</a>
+    <a href="docs/app.html">进入阅读</a>
+    <a href="docs/radio.html">电台档案</a>
+    <a href="docs/news.html">新闻档案</a>
   </div>
 </footer>
 
@@ -585,8 +561,8 @@ window.addEventListener('load', () => {
         vx: (Math.random() - 0.5) * 0.2,
         vy: -Math.random() * 0.3 - 0.05,
         r: Math.random() * 1.8 + 0.2,
-        a: Math.random() * 0.15 + 0.03,
-        color: Math.random() > 0.6 ? '160,40,40' : '70,100,160'
+        a: Math.random() * 0.12 + 0.02,
+        color: Math.random() > 0.6 ? '180,30,30' : '80,120,180'
       });
     }
   }

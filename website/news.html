@@ -6,26 +6,43 @@
 <title>新闻档案 - 2019 血疫纪元</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg-base: #1a1c20;
+  --bg-surface: #20222a;
+  --bg-elevated: #282a32;
+  --bg-card: #24262c;
+  --text-primary: #ccc8c0;
+  --text-secondary: #8a8580;
+  --text-dim: #5a5550;
+  --accent: #5baa7e;
+  --accent-blue: #5a8cbf;
+  --accent-red: #c45c5c;
+  --border: rgba(255,255,255,0.07);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+}
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 16px; scroll-behavior: smooth; }
 body {
   font-family: 'Noto Sans SC', sans-serif;
-  background: #0a0a0e;
-  color: #dcdce4;
+  background: var(--bg-base);
+  color: var(--text-primary);
   min-height: 100vh;
 }
-::selection { background: rgba(180,30,30,0.3); color: #fff; }
+::selection { background: rgba(90,140,191,0.3); color: var(--text-primary); }
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(180,30,30,0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 
 /* Focus styles */
 :focus-visible {
-  outline: 2px solid rgba(180,30,30,0.4);
+  outline: 2px solid rgba(90,140,191,0.4);
   outline-offset: 2px;
 }
 button:focus-visible, a:focus-visible {
-  outline: 2px solid rgba(180,30,30,0.6);
+  outline: 2px solid rgba(90,140,191,0.6);
   outline-offset: 2px;
 }
 
@@ -43,21 +60,22 @@ button:focus-visible, a:focus-visible {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0.8rem 2rem;
-  background: rgba(10,10,14,0.95);
-  border-bottom: 1px solid rgba(180,30,30,0.1);
-  backdrop-filter: blur(10px);
+  background: rgba(26,28,32,0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
 }
 .site-header .logo {
   font-family: 'Noto Serif SC', serif;
-  font-size: 0.9rem; color: #e8e8f0;
+  font-size: 0.9rem; color: var(--text-primary);
   cursor: pointer; text-decoration: none;
+  letter-spacing: 0.05em;
 }
-.site-header .logo span { color: rgba(180,30,30,0.8); }
+.site-header .logo span { color: var(--accent-blue); }
 .site-header .back {
-  font-size: 0.75rem; color: rgba(220,220,228,0.5);
+  font-size: 0.75rem; color: var(--text-dim);
   text-decoration: none; transition: color 0.3s;
 }
-.site-header .back:hover { color: rgba(180,30,30,0.8); }
+.site-header .back:hover { color: var(--accent-blue); }
 
 /* ===== ARCHIVE ROOM ===== */
 .archive-room {
@@ -71,16 +89,16 @@ button:focus-visible, a:focus-visible {
 }
 .archive-title h1 {
   font-family: 'Noto Serif SC', serif;
-  font-size: 1.5rem; color: #e8e8f0;
+  font-size: 1.5rem; color: var(--text-primary);
   letter-spacing: 0.15em; margin-bottom: 0.5rem;
 }
 .archive-title .sub {
-  font-size: 0.78rem; color: rgba(220,220,228,0.35);
+  font-size: 0.78rem; color: var(--text-dim);
   letter-spacing: 0.2em;
 }
 .archive-title .divider {
   width: 40px; height: 1px;
-  background: rgba(180,30,30,0.3);
+  background: linear-gradient(90deg, transparent, rgba(90,140,191,0.35), transparent);
   margin: 1rem auto 0;
 }
 
@@ -92,29 +110,29 @@ button:focus-visible, a:focus-visible {
 .timeline-btn {
   display: flex; flex-direction: column; align-items: center;
   padding: 0.8rem 1.2rem;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 6px; cursor: pointer;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md); cursor: pointer;
   transition: all 0.3s; min-width: 120px;
 }
 .timeline-btn:hover {
-  background: rgba(180,30,30,0.06);
-  border-color: rgba(180,30,30,0.2);
+  background: var(--bg-elevated);
+  border-color: rgba(90,140,191,0.18);
 }
 .timeline-btn.active {
-  background: rgba(180,30,30,0.08);
-  border-color: rgba(180,30,30,0.4);
+  background: rgba(90,140,191,0.08);
+  border-color: rgba(90,140,191,0.35);
 }
 .timeline-btn .date {
   font-family: 'Courier New', monospace;
-  font-size: 0.72rem; color: rgba(180,30,30,0.6);
+  font-size: 0.72rem; color: rgba(90,140,191,0.5);
   letter-spacing: 0.05em;
 }
 .timeline-btn .paper {
-  font-size: 0.82rem; color: rgba(220,220,228,0.7);
+  font-size: 0.82rem; color: var(--text-secondary);
   margin-top: 0.2rem;
 }
-.timeline-btn.active .paper { color: #e8e8f0; }
+.timeline-btn.active .paper { color: var(--text-primary); }
 
 /* ===== NEWSPAPER PAGE ===== */
 .newspaper {
@@ -128,10 +146,10 @@ button:focus-visible, a:focus-visible {
 
 .paper-page {
   position: relative;
-  background: #f5f0e8;
+  background: #f0ebe0;
   color: #1a1a1a;
   border-radius: 2px;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,0,0,0.08);
   padding: 2.5rem 3rem;
   font-family: 'Noto Serif', 'Noto Serif SC', 'SimSun', serif;
   overflow: hidden;
@@ -146,15 +164,15 @@ button:focus-visible, a:focus-visible {
       0deg,
       transparent,
       transparent 28px,
-      rgba(0,0,0,0.015) 28px,
-      rgba(0,0,0,0.015) 29px
+      rgba(0,0,0,0.012) 28px,
+      rgba(0,0,0,0.012) 29px
     );
   pointer-events: none; z-index: 1;
 }
 .paper-page::after {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.08) 100%);
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.06) 100%);
   pointer-events: none; z-index: 2;
 }
 
@@ -213,7 +231,7 @@ button:focus-visible, a:focus-visible {
 .article-columns {
   column-count: 2;
   column-gap: 2rem;
-  column-rule: 1px solid #ccc;
+  column-rule: 1px solid #c8c4bc;
   font-size: 0.88rem;
   line-height: 1.75;
   color: #2a2a2a;
@@ -241,14 +259,14 @@ button:focus-visible, a:focus-visible {
   text-indent: 0;
 }
 .article-columns .highlight {
-  background: rgba(180,30,30,0.08);
+  background: rgba(90,140,191,0.1);
   padding: 0 2px;
 }
 
 /* Footer */
 .paper-footer {
   margin-top: 1.5rem; padding-top: 0.8rem;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #c8c4bc;
   display: flex; justify-content: space-between;
   font-size: 0.7rem; color: #888;
 }
@@ -257,16 +275,16 @@ button:focus-visible, a:focus-visible {
 .analysis-panel {
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: rgba(14,14,18,0.95);
-  border: 1px solid rgba(180,30,30,0.1);
-  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   display: none;
 }
 .newspaper.active .analysis-panel { display: block; }
 
 .analysis-panel h3 {
   font-family: 'Noto Serif SC', serif;
-  font-size: 0.9rem; color: rgba(180,30,30,0.8);
+  font-size: 0.9rem; color: var(--accent-blue);
   margin-bottom: 1rem; letter-spacing: 0.1em;
 }
 .analysis-panel .clue {
@@ -275,17 +293,17 @@ button:focus-visible, a:focus-visible {
 }
 .analysis-panel .clue-num {
   flex-shrink: 0; width: 20px; height: 20px;
-  background: rgba(180,30,30,0.15);
+  background: rgba(90,140,191,0.12);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.65rem; color: rgba(180,30,30,0.8);
+  font-size: 0.65rem; color: var(--accent-blue);
   font-weight: 700; margin-top: 0.15rem;
 }
 .analysis-panel .clue-text {
-  font-size: 0.82rem; color: rgba(220,220,228,0.7);
+  font-size: 0.82rem; color: var(--text-secondary);
   line-height: 1.6;
 }
-.analysis-panel .clue-text strong { color: rgba(220,220,228,0.9); }
+.analysis-panel .clue-text strong { color: var(--text-primary); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
@@ -295,6 +313,9 @@ button:focus-visible, a:focus-visible {
   .timeline-btn { min-width: 90px; padding: 0.6rem 0.8rem; }
 }
 </style>
+<meta name="theme-color" content="#1a1c20">
+<meta name="description" content="2019 血疫纪元 - 一场以博览会为伪装的基因武器袭击">
+<meta name="color-scheme" content="dark">
 </head>
 <body>
 
@@ -302,7 +323,7 @@ button:focus-visible, a:focus-visible {
 <header class="site-header">
   <a class="logo" href="app.html">2019 <span>血疫纪元</span></a>
   <div style="display:flex;gap:1rem;align-items:center;">
-    <a class="back" href="radio.html" style="color:rgba(255,140,40,0.5);">FM电台</a>
+    <a class="back" href="radio.html" style="color:rgba(212,148,74,0.5);">FM电台</a>
     <a class="back" href="app.html">&larr; 主站</a>
   </div>
 </header>
@@ -352,7 +373,7 @@ button:focus-visible, a:focus-visible {
           <p>经过为期半个月的严格评审，<span class="highlight">北极星商业投资有限公司</span>凭借其雄厚的资本实力、覆盖酒店与物流的多元化产业布局，以及一份号称"整合了国际顶尖安保与生物安全标准"的保障方案，成功击败多家竞争对手，拔得头筹，成为本次博览会独家核心后勤服务供应商。</p>
           <p>根据市政府公示的合作协议，北极星商业投资有限公司将通过其旗下的两大子公司来履行合同：<span class="highlight">北极星商旅酒店（CBD店）</span>将作为本次博览会级别最高的官方指定接待酒店，负责接待所有海外贵宾、重要代表团及特邀技术专家；<span class="highlight">北极星冷链</span>将独家负责所有需特殊温控的海外展品从海关到展馆的全程运输工作。</p>
           <p>市招商局负责人李主任在新闻发布会上表示："北极星公司的综合解决方案展现了卓越的专业性，特别是其在冷链运输中对生物安全防护的承诺，符合我们举办国际一流展会的高标准要求。"</p>
-          <p>据悉，本次博览会最大的亮点之一，是来自北美的农业科技代表团将携多项前沿技术与展品参展，其规模和技术含量均创下历届之最。其中，部分展品对运输环境要求极为苛刻，必须在全程深低温（-70℃）下保存。北极星冷链公司在竞标方案中特别强调，其拥有多辆配备了"Cryo-Guard"先进深冷系统的特种运输车，足以满足此类高规格的运输需求。</p>
+          <p>据悉，本次博览会最大的亮点之一，是来自北美的农业科技代表团将携多项前沿技术与展品参展，其规模和技术含量均创历届之最。其中，部分展品对运输环境要求极为苛刻，必须在全程深低温（-70℃）下保存。北极星冷链公司在竞标方案中特别强调，其拥有多辆配备了"Cryo-Guard"先进深冷系统的特种运输车，足以满足此类高规格的运输需求。</p>
         </div>
         <div class="paper-footer">
           <span>X市商报 &copy; 2019</span>
@@ -372,7 +393,7 @@ button:focus-visible, a:focus-visible {
       </div>
       <div class="clue">
         <div class="clue-num">3</div>
-        <div class="clue-text"><strong>冷链运输车：</strong>报道明确提及负责运输需要特殊温控的"活体样本、生物制剂"，直接将长江二桥上出事的冷链车与危险品联系起来。</div>
+        <div class="clue-text"><strong>冷链运输车：</strong>报道明确提及负责运输需要特殊温控的"活体样本、生物制剂"，直接将清江二桥上出事的冷链车与危险品联系起来。</div>
       </div>
       <div class="clue">
         <div class="clue-num">4</div>
@@ -396,7 +417,7 @@ button:focus-visible, a:focus-visible {
         </div>
         <div class="article-columns">
           <p class="byline">本报讯（记者 王明）</p>
-          <p>昨日清晨，X市南北交通大动脉——长江二桥在周一早高峰陷入长达三小时的瘫痪，车流一度绵延近五公里。这场意外的交通"肠梗阻"，源于一辆冷链运输货车突发故障，而更令人忧心的是，该车驾驶员在等待救援过程中突发晕厥并伴有异常行为，加剧了现场的混乱和拥堵。</p>
+          <p>昨日清晨，X市南北交通大动脉——清江二桥在周一早高峰陷入长达三小时的瘫痪，车流一度绵延近五公里。这场意外的交通"肠梗阻"，源于一辆冷链运输货车突发故障，而更令人忧心的是，该车驾驶员在等待救援过程中突发晕厥并伴有异常行为，加剧了现场的混乱和拥堵。</p>
           <p>事故发生于上午6点50分左右。据后方车辆司机李先生描述，一辆白色车体、印有"<span class="highlight">北极星冷链</span>"标识的中型厢式货车，在行驶至大桥中段时突然失去动力，车身明显抖动后停靠在最右侧车道。多名目击者称，货车停下后，其车厢后部保温层似乎出现破损，有少量白色霜雾状气体间歇性逸出，并伴有难以描述的微弱刺激性气味。</p>
           <p>交警迅速赶到现场。据现场执勤交警张警官描述，他们在尝试与货车司机沟通时，发现该名中年男性司机状态极为不佳。"他脸色苍白，满头虚汗，眼神有些涣散，说话时声音嘶哑且断断续续，反复抱怨'头痛得要裂开'、'喉咙像被堵住'。"张警官表示，司机自称姓陈，在等待拖车期间，他试图下车检查故障。</p>
           <p>然而，陈司机接下来的行为让现场人员感到困惑和担忧。他并未使用工具，而是不顾交警劝阻，徒手去触摸和试图撕扯车厢后部破损的保温材料，动作显得笨拙且固执。目击者王女士称："那位司机师傅看起来像中暑了，但眼神又很怪，直勾勾地盯着车后面破损的地方，用手去抓那些白雾，喊他也不怎么理人，有点魔怔了。"</p>
@@ -449,7 +470,7 @@ button:focus-visible, a:focus-visible {
           <p>下午4点15分，记者赶到现场时，酒店周边主要路口已被市局特警完全封锁。酒店正门前，一排黄黑相间的防冲撞拒马森然林立，数队头戴战术头盔、手持防爆盾的特警人员严阵以待，气氛异常紧张。与常规火灾现场不同的是，除了几辆停在远处待命的消防指挥车外，未见有消防车展开云梯进行高空作业，亦无消防员进入楼内。空气中弥漫的不是焦糊味，而是一种令人不安的寂静。</p>
           <p>"说是着火了，可你看那楼，玻璃好好的，连个烟熏的印子都没有，"在警戒线外经营便利店的王老板对记者说，"反倒是这些警察，一个个跟拍电影似的，把整条街都封死了，不让进也不让出，连问一句都不理人。"</p>
           <p>据了解，北极星商旅酒店是正在我市举办的"国际农业博览会"官方指定的两家接待酒店之一，入住了大量外籍参展商，其中不乏来自北美和欧洲的农业科技代表团。事件发生后，市新闻办公室仅在官方微博发布了一条简短通报，称"某酒店发生火情，消防与公安部门已迅速处置"，通报中未提及酒店名称及火灾具体情况。</p>
-          <p>值得注意的是，涉事的北极星商旅酒店，其母公司正是北极星商业投资有限公司。该公司旗下的另一家子公司——<span class="highlight">北极星冷链</span>，在一周前刚刚因其货车在长江二桥上发生故障、司机突发急病送医而引发全城关注。据本报后续了解，该名司机陈某入院后病情危重，已被转入重症监护室并实施严格的<span class="highlight">生物安全隔离</span>，其病因至今未对外公布。</p>
+          <p>值得注意的是，涉事的北极星商旅酒店，其母公司正是北极星商业投资有限公司。该公司旗下的另一家子公司——<span class="highlight">北极星冷链</span>，在一周前刚刚因其货车在清江二桥上发生故障、司机突发急病送医而引发全城关注。据本报后续了解，该名司机陈某入院后病情危重，已被转入重症监护室并实施严格的<span class="highlight">生物安全隔离</span>，其病因至今未对外公布。</p>
           <p>晚间，一位自称是酒店提前下班的后勤员工向本报匿名透露，封锁前约半小时，酒店内部通讯系统曾收到来自<span class="highlight">19楼客房区域的紧急医疗求助</span>，随后安保部门便上楼处置，不久后整栋大楼的通讯信号和网络被切断，所有员工被要求待在原地，直至特警进驻并宣布封锁。</p>
         </div>
         <div class="paper-footer">
