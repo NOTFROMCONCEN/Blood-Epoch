@@ -5,23 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>新闻档案 - 2019 血疫纪元</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
 <style>
-/* ===== CSS VARIABLES ===== */
-:root {
-  --bg-base: #1a1c20;
-  --bg-surface: #20222a;
-  --bg-elevated: #282a32;
-  --bg-card: #24262c;
-  --text-primary: #ccc8c0;
-  --text-secondary: #8a8580;
-  --text-dim: #5a5550;
-  --accent: #5baa7e;
-  --accent-blue: #5a8cbf;
-  --accent-red: #c45c5c;
-  --border: rgba(255,255,255,0.07);
-  --radius-sm: 4px;
-  --radius-md: 8px;
-}
+/* Theme variables defined in common.css */
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 16px; scroll-behavior: smooth; }
@@ -60,9 +46,10 @@ button:focus-visible, a:focus-visible {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0.8rem 2rem;
-  background: rgba(26,28,32,0.92);
+  background: var(--header-bg);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(12px);
+  transition: background 0.35s ease;
 }
 .site-header .logo {
   font-family: 'Noto Serif SC', serif;
@@ -319,6 +306,9 @@ button:focus-visible, a:focus-visible {
 </head>
 <body>
 
+<!-- Theme Toggle -->
+<button class="theme-toggle" onclick="cycleTheme()" title="切换主题">☀</button>
+
 <!-- Header -->
 <header class="site-header">
   <a class="logo" href="app.html">2019 <span>血疫纪元</span></a>
@@ -525,6 +515,9 @@ document.addEventListener('keydown', function(e) {
     showPaper(currentPaper + 1);
   }
 });
+
+// Theme
+(function(){var t=localStorage.getItem('theme')||'warm';document.documentElement.setAttribute('data-theme',t);var icons={warm:'☀',light:'○',dark:'●'};var btn=document.querySelector('.theme-toggle');if(btn)btn.textContent=icons[t];window.cycleTheme=function(){var s=['warm','light','dark'];var cur=document.documentElement.getAttribute('data-theme');var i=(s.indexOf(cur)+1)%s.length;document.documentElement.setAttribute('data-theme',s[i]);localStorage.setItem('theme',s[i]);if(btn)btn.textContent=icons[s[i]];};})();
 </script>
 
 </body>
