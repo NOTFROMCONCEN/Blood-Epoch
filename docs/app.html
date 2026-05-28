@@ -111,9 +111,9 @@ body {
   border-bottom: 1px solid rgba(91,170,126,0.08);
 }
 .part-tab {
-  flex: 1; padding: 0.5rem 0.6rem;
+  flex: 1; padding: 0.5rem 0.3rem;
   text-align: center; cursor: pointer;
-  font-size: 0.72rem; font-weight: 700;
+  font-size: 0.68rem; font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--text-dim);
   border-bottom: 2px solid transparent;
@@ -575,6 +575,9 @@ body {
       </button>
       <button class="part-tab" onclick="switchPart(3)">
         <span class="part-num">PART</span>净域残响
+      </button>
+      <button class="part-tab" onclick="switchPart(4)">
+        <span class="part-num">PART</span>根系蔓延
       </button>
     </div>
     <div class="nav-scroll" id="nav-container"></div>
@@ -1043,6 +1046,26 @@ const TIMELINE_DATA = {
       { date: '2021.03.20', title: '周先生的信', desc: '周建国口述写给从未见面的女儿的信，表达父爱与歉意', id: 'p3-ch5-02', hasContent: true },
       { date: '2021.04.01', title: '城市醒来', desc: '1,200名"空壳"患者恢复意识，X市进入全面重建阶段', id: 'p3-ch5-04', hasContent: true },
     ]
+  },
+  4: {
+    label: '根系蔓延',
+    range: '2023年3月 — 6月',
+    events: [
+      { date: '2023.03.11', title: '全球信号同步', desc: '17个城市地下同时检测到菌丝信号，频率与2019年X市完全一致', id: 'p4-prologue-01', hasContent: true },
+      { date: '2023.03.12', title: '柏林地铁事件', desc: '柏林U5线隧道壁出现蓝色菌丝，《明镜周刊》记者Lena Braun报道', id: 'p4-prologue-02', hasContent: true },
+      { date: '2023.03.15', title: '幸福里的两年后', desc: '李明收到GBSC紧急邮件，K-8开始接收来自全球的梦境信号', id: 'p4-ch1-01', hasContent: true },
+      { date: '2023.03.16', title: '地下50米', desc: '地质勘探队在城北公园地下发现巨大空腔，内有蓝色菌丝构成的"树"', id: 'p4-ch1-02', hasContent: true },
+      { date: '2023.03.18', title: 'Nodus Primus布道', desc: 'Mueller通过全球菌丝网络发出47分钟广播，邀请人类"回家"', id: 'p4-ch2-01', hasContent: true },
+      { date: '2023.03.19', title: '圣女再现', desc: 'A-01体甘露代谢活动与全球信号同步升高，决定前往柏林', id: 'p4-ch2-02', hasContent: true },
+      { date: '2023.03.20', title: '第三种人', desc: '韩风博士发表报告：盖亚是地球原生智慧，存在超过50,000年', id: 'p4-ch2-03', hasContent: true },
+      { date: '2023.03.25', title: '全球同步激活', desc: '17城市菌丝信号飙升300%-500%，纽约踩踏事件致2死47伤', id: 'p4-ch3-01', hasContent: true },
+      { date: '2023.03.25', title: 'K-8下入防空洞', desc: 'K-8、李明、老赵进入X市地下50米空腔，与母亲意识直接对话', id: 'p4-ch3-03', hasContent: true },
+      { date: '2023.03.25', title: '母亲的承诺', desc: '母亲同意停止全球激活，承诺学会等待，不再强迫任何人"回家"', id: 'p4-ch4-01', hasContent: true },
+      { date: '2023.03.26', title: '第19.3号协议解密', desc: '从Mueller设备中提取的全球精英"永久性人口优化"协议曝光', id: 'p4-ch4-03', hasContent: true },
+      { date: '2023.03.26', title: '甘露的代价', desc: 'A-01进入柏林地铁释放甘露，以生命为代价为K-8铺路', id: 'p4-ch4-04', hasContent: true },
+      { date: '2023.03.26', title: 'K-8的回答', desc: 'K-8在柏林地下500米处与Mueller对话："痛苦是人类的特征，不是缺陷"', id: 'p4-ch5-02', hasContent: true },
+      { date: '2023.04.01', title: '新世界的黎明', desc: '全球危机平息，菌丝网络安静下来，人类学会了与盖亚共存', id: 'p4-ch5-04', hasContent: true },
+    ]
   }
 };
 
@@ -1053,15 +1076,18 @@ function showTimeline(part) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   const area = document.getElementById('content-area');
   const tl = TIMELINE_DATA[_currentTimelinePart];
-  const otherPart = _currentTimelinePart === 1 ? 2 : 1;
-  const otherTl = TIMELINE_DATA[otherPart];
+
+  let tabsHtml = '';
+  [1,2,3,4].forEach(p => {
+    const d = TIMELINE_DATA[p];
+    if (d) tabsHtml += `<button class="timeline-tab ${_currentTimelinePart === p ? 'active' : ''}" onclick="showTimeline(${p})">Part ${p} · ${d.label}</button>`;
+  });
 
   let html = `
     <div class="timeline-header fade-in">
       <h2>剧情时间线</h2>
       <div class="timeline-tabs">
-        <button class="timeline-tab ${_currentTimelinePart === 1 ? 'active' : ''}" onclick="showTimeline(1)">Part 1 · ${TIMELINE_DATA[1].label}</button>
-        <button class="timeline-tab ${_currentTimelinePart === 2 ? 'active' : ''}" onclick="showTimeline(2)">Part 2 · ${TIMELINE_DATA[2].label}</button>
+        ${tabsHtml}
       </div>
       <p>${tl.range} &middot; 点击事件跳转阅读</p>
     </div>
